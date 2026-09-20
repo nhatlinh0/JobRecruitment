@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: job-recruitment
+
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=job_recruitment;encrypt=true;trustServerCertificate=true
+    username: sa
+    password: 123456
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+  jpa:
+    database-platform: org.hibernate.dialect.SQLServerDialect
+    hibernate:
+      ddl-auto: update
