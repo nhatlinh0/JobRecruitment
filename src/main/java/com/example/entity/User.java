@@ -22,13 +22,13 @@ public class User {
     @Column(name = "email", length = 50, nullable = false, unique = true)
     private String email;
 
-    @Column(name = "password", length = 50, nullable = false)
+    @Column(name = "password", length = 255, nullable = false)
     private String password;
 
     @Column(name = "username", length = 50, nullable = false)
     private String username;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
