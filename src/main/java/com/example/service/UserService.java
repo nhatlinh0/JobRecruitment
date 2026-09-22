@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -34,6 +35,23 @@ public class UserService {
         user.setRole(role);
 
         return userRepository.save(user);
+    }
+
+    public User updateUser(UserRequest userRequest) {
+        Optional<User> user = userRepository.findByEmail(userRequest.getEmail());
+        if (user.isPresent()) {
+            User find = user.get();
+            find.setEmail(userRequest.getEmail());
+            find.setUsername(userRequest.getUsername());
+            find.setPassword(
+                    passwordEncoder.encode(userRequest.getPassword())
+            );
+
+            return userRepository.save(find);
+        }
+         else {
+             return null;
+        }
     }
 
     public List<UserResponse> getAllUsers() {

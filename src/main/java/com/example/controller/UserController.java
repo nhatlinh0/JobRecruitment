@@ -40,6 +40,17 @@ public class UserController {
         }
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<UserResponse> updateUser (@Valid @RequestBody UserRequest userRequest) {
+        try {
+            User updatedUser = userService.updateUser(userRequest);
+            return ResponseEntity.ok(new UserResponse(updatedUser));
+        } catch (Exception e) {
+            log.error("Error: "+e);
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
         userService.deleteUserById(id);
