@@ -1,5 +1,7 @@
 package com.example.entity;
 
+import com.example.enums.WorkingType;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,23 +26,33 @@ public class Job {
     @Column(name = "title", length = 255, nullable = false)
     private String title;
 
-    @Column(name = "location", length = 255)
-    private String location;
+    @Column(name = "address", length = 255)
+    private String address;
 
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @Column(name = "experience", length = 100)
-    private String experience;
+    @Column(name = "experience_max")
+    private Integer experienceMax;
 
+    @Column(name = "experience_min")
+    private Integer experienceMin;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "working_type", length = 50)
-    private String workingType;
+    private WorkingType workingType;
 
-    @Column(name = "salary_range", length = 100)
-    private String salaryRange;
+    @Column(name = "salary_max")
+    private Integer salaryMax;
 
-    @Column(name = "position", length = 100)
-    private String position;
+    @Column(name = "salary_min")
+    private Integer salaryMin;
+
+    @Column(name = "salary_negotiable", nullable = false)
+    private Boolean salaryNegotiable = false;
+
+    @Column(name = "city", length = 50)
+    private String city;
 
     @Lob // Tương ứng với kiểu nvarchar(MAX) trong SQL Server
     @Column(name = "description", columnDefinition = "nvarchar(MAX)")

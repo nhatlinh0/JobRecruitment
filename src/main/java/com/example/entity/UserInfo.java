@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import com.example.enums.WorkingType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,20 +18,33 @@ public class UserInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "salary", length = 50)
-    private String salary;
+    @Column(name = "salary_min")
+    private Integer salaryMin;
 
-    @Column(name = "work_area", length = 50)
-    private String workArea;
+    @Column(name = "salary_max")
+    private Integer salaryMax;
 
-    @Column(name = "exp", length = 50)
-    private String exp;
+    @Column(name = "salary_negotiable", nullable = false)
+    private boolean salaryNegotiable = false;
+
+    @Column(name = "city", length = 50)
+    private String city;
+
+    @Column(name = "experience_min")
+    private Integer experienceMin;
+
+    @Column(name = "experience_max")
+    private Integer experienceMax;
 
     @Column(name = "image", length = 100)
     private String image;
 
     @Column(name = "username", length = 50)
     private String username;
+
+    @Column(name = "working_type")
+    @Enumerated(EnumType.STRING)
+    private WorkingType workingType;
 
     @OneToOne
     @JoinColumn(name = "user_id", unique = true, nullable = false)
