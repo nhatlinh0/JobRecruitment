@@ -7,14 +7,12 @@ import lombok.Data;
 
 @Data
 public class UserResponse {
-    private int id;
     private String email;
     private String username;
     private String roleName;
 
     public UserResponse (User user) {
         if(user != null) {
-            this.id = user.getId();
             this.email = user.getEmail();
             this.username = user.getUsername();
             this.roleName = user.getRole().getName();

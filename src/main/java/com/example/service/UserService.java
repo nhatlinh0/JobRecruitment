@@ -37,8 +37,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateUser(UserRequest userRequest) {
-        Optional<User> user = userRepository.findByEmail(userRequest.getEmail());
+    public User updateUser(UserRequest userRequest, int id) {
+        Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
             User find = user.get();
             find.setEmail(userRequest.getEmail());

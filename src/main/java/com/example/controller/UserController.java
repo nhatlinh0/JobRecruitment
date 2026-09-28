@@ -40,10 +40,10 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<UserResponse> updateUser (@Valid @RequestBody UserRequest userRequest) {
+    @PutMapping("/update/{id}")
+    public ResponseEntity<UserResponse> updateUser (@Valid @RequestBody UserRequest userRequest, @PathVariable int id) {
         try {
-            User updatedUser = userService.updateUser(userRequest);
+            User updatedUser = userService.updateUser(userRequest, id);
             return ResponseEntity.ok(new UserResponse(updatedUser));
         } catch (Exception e) {
             log.error("Error: "+e);

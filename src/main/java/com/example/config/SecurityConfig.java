@@ -26,14 +26,14 @@ public class SecurityConfig {
                         auth -> auth
 //                                .requestMatchers("/auth/welcome")
                                 .anyRequest()
-                                .permitAll());
+//                                .permitAll());
 //                                .requestMatchers("/auth/user/**")
 //                                .hasRole("USER")
 //                                .requestMatchers("/auth/admin/**")
 //                                .hasRole("ADMIN")
 //                                .anyRequest()
-//                                .authenticated())
-//                .httpBasic(Customizer.withDefaults());
+                                .authenticated())
+                .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }

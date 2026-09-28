@@ -8,7 +8,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "domains")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

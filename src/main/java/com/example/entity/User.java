@@ -10,7 +10,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -36,7 +37,7 @@ public class User {
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserInfo userInfo;
 
     @OneToMany(mappedBy = "user")
