@@ -1,7 +1,9 @@
 package com.example.service;
 
+import com.example.dto.DomainResponse;
 import com.example.entity.Domain;
 import com.example.repository.DomainRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +14,18 @@ public class DomainService {
     @Autowired
     private DomainRepository domainRepository;
 
-    public Domain saveDomain(Domain domain) {
-        return domainRepository.save(domain);
+    public void saveDomain(Domain domain) {
+         domainRepository.save(domain);
     }
 
-    public List<Domain> findAll() {
-        return domainRepository.findAll();
+    public void updateDomain (Domain domain, Integer id) {
+        Domain newDomain = domainRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy domain"));
+        newDomain.setName(domain.getName());
+         domainRepository.save(newDomain);
+    }
+
+    public List<DomainResponse> findAll() {
+        return domainRepository.findAll().stream().map((x) -> new DomainResponse(x)).toList();
     }
 
     public void deleteDomain(int id) {

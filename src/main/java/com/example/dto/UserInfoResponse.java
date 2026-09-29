@@ -23,7 +23,7 @@ public class UserInfoResponse {
             this.salaryNegotiable = userInfo.isSalaryNegotiable();
             this.city = userInfo.getCity();
             this.experienceMax = userInfo.getExperienceMax();
-            this.experienceMin = userInfo.getSalaryMin();
+            this.experienceMin = userInfo.getExperienceMin();
             this.workType = userInfo.getWorkingType();
             this.image = userInfo.getImage();
             this.domainName = userInfo.getDomain().getName();

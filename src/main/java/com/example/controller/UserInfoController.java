@@ -41,6 +41,20 @@ public class UserInfoController {
         }
     }
 
+    @PutMapping
+    public ResponseEntity<UserInfoResponse> updateUserInfo(@Valid @RequestBody UserInfoRequest userInfoRequest) {
+//        BASIC
+        String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        try {
+            UserInfo userInfo = userInfoService.updateUserInfo(userInfoRequest, userEmail);
+            return new ResponseEntity<>(new UserInfoResponse(userInfo),HttpStatus.OK);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUserInfo(@PathVariable Integer id) {
         UserInfo userInfo = userInfoService.findUserInfo(id);

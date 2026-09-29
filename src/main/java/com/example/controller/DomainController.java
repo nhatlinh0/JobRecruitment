@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.dto.DomainResponse;
 import com.example.entity.Domain;
 import com.example.service.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +17,26 @@ public class DomainController {
     private DomainService domainService;
 
     @GetMapping
-    public ResponseEntity<List<Domain>> getAllDomain() {
+    public ResponseEntity<List<DomainResponse>> getAllDomain() {
         return ResponseEntity.ok(domainService.findAll());
     }
 
     @PostMapping()
-    public ResponseEntity<?> createDomain(@RequestBody Domain domain) {
-        try {
+    public ResponseEntity<?> updateDomain(@RequestBody Domain domain) {
+        if (domain.getName() != null && domain.getName() != "") {
             domainService.saveDomain(domain);
             return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (Exception e){
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> createDomain(@RequestBody Domain domain, @PathVariable Integer id) {
+        if (domain.getName() != null && domain.getName() != "") {
+            domainService.updateDomain(domain, id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
