@@ -81,7 +81,7 @@ public class Job {
     @ManyToMany(mappedBy = "jobs")
     private Set<User> users = new HashSet<>();
 
-    @OneToMany(mappedBy = "job")
+    @OneToMany(mappedBy = "job", cascade = CascadeType.REMOVE)
     Set<Application> applications = new HashSet<>();
 
     @ManyToMany

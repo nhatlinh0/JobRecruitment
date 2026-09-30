@@ -55,14 +55,4 @@ public class UserInfoController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUserInfo(@PathVariable Integer id) {
-        UserInfo userInfo = userInfoService.findUserInfo(id);
-        if (userInfo != null) {
-            userInfoService.deleteUserInfo(userInfo);
-            return ResponseEntity.noContent().build();
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-    }
 }

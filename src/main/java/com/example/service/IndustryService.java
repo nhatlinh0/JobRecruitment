@@ -4,6 +4,7 @@ import com.example.dto.IndustryRequest;
 import com.example.dto.IndustryResponse;
 import com.example.entity.Domain;
 import com.example.entity.Industry;
+import com.example.repository.CompanyRepository;
 import com.example.repository.IndustryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,9 @@ import java.util.List;
 public class IndustryService {
     @Autowired
     private IndustryRepository industryRepository;
+
+    @Autowired
+    private CompanyRepository companyRepository;
 
     public void saveIndustry(IndustryRequest industryRequest) {
         Industry industry = new Industry();
@@ -35,6 +39,7 @@ public class IndustryService {
 
     public void deleteIndustry(Integer id) {
         industryRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy industry"));
+        companyRepository.clearIndustry(id);
         industryRepository.deleteById(id);
     }
 }

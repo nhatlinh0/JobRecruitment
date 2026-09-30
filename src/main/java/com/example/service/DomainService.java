@@ -3,9 +3,12 @@ package com.example.service;
 import com.example.dto.DomainResponse;
 import com.example.entity.Domain;
 import com.example.repository.DomainRepository;
+import com.example.repository.JobRepository;
+import com.example.repository.UserInfoRepository;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,6 +16,12 @@ import java.util.List;
 public class DomainService {
     @Autowired
     private DomainRepository domainRepository;
+
+    @Autowired
+    private JobRepository jobRepository;
+
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
     public void saveDomain(Domain domain) {
          domainRepository.save(domain);
@@ -28,8 +37,11 @@ public class DomainService {
         return domainRepository.findAll().stream().map((x) -> new DomainResponse(x)).toList();
     }
 
+    @Transactional
     public void deleteDomain(Integer id) {
         domainRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy domain"));
+        jobRepository.clearDomain(id);
+        userInfoRepository.clearDomain(id);
         domainRepository.deleteById(id);
     }
 }

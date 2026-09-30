@@ -24,7 +24,7 @@ public class Domain {
     @OneToMany(mappedBy = "domain")
     private Set<Job> jobs = new HashSet<>();
 
-    @OneToMany(mappedBy = "domain")
+    @OneToMany(mappedBy = "domain", cascade = CascadeType.REMOVE)
     private Set<Skill> skills = new HashSet<>();
 
     @OneToMany(mappedBy = "domain")
