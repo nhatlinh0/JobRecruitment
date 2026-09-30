@@ -1,5 +1,6 @@
 package com.example.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import jakarta.validation.constraints.Email;
@@ -20,5 +21,6 @@ public class UserRequest {
     @NotBlank(message = "Username không được để trống")
     private String username;
 
+    @NotNull(message = "Role ID không được để trống")
     private Integer roleId;
 }

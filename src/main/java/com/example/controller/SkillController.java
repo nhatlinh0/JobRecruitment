@@ -1,9 +1,8 @@
 package com.example.controller;
 
-import com.example.dto.IndustryRequest;
-import com.example.dto.IndustryResponse;
-import com.example.entity.Industry;
-import com.example.service.IndustryService;
+import com.example.dto.SkillRequest;
+import com.example.dto.SkillResponse;
+import com.example.service.SkillService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,38 +12,36 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/industry")
-public class IndustryController {
-
+@RequestMapping("/skill")
+public class SkillController {
     @Autowired
-    private IndustryService industryService;
+    private SkillService skillService;
 
     @GetMapping
-    public ResponseEntity<List<IndustryResponse>> getAllIndustry() {
-        List<IndustryResponse> list = industryService.getAllIndustry();
+    public ResponseEntity<List<SkillResponse>> getAllSkill() {
+        List<SkillResponse> list = skillService.getAllSkill();
         if (!list.isEmpty()) {
             return ResponseEntity.ok(list);
-        }
-        else {
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping
-    public ResponseEntity<?> createIndustry(@Valid @RequestBody IndustryRequest industryRequest){
-        industryService.saveIndustry(industryRequest);
+    public ResponseEntity<?> createSkill(@Valid @RequestBody SkillRequest skillRequest){
+        skillService.saveSkill(skillRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateIndustry(@Valid @RequestBody IndustryRequest industryRequest, @PathVariable Integer id){
-        industryService.updateIndustry(industryRequest ,id);
+    public ResponseEntity<?> updateSkill(@Valid @RequestBody SkillRequest skillRequest, @PathVariable Integer id){
+        skillService.updateSkill(skillRequest ,id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteIndustry(@PathVariable Integer id) {
-        industryService.deleteIndustry(id);
+        skillService.deleteSkill(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

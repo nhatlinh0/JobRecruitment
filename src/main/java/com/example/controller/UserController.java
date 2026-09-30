@@ -26,7 +26,11 @@ public class UserController {
     @GetMapping("/get-all")
     public ResponseEntity<List<UserResponse>> getAllUsers() {
          List<UserResponse> userResponseList = userService.getAllUsers();
-        return ResponseEntity.ok(userResponseList);
+         if (!userResponseList.isEmpty()) {
+             return ResponseEntity.ok(userResponseList);
+         } else {
+             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+         }
     }
 
     @PostMapping("/register")
