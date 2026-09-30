@@ -28,7 +28,8 @@ public class DomainService {
         return domainRepository.findAll().stream().map((x) -> new DomainResponse(x)).toList();
     }
 
-    public void deleteDomain(int id) {
+    public void deleteDomain(Integer id) {
+        domainRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy domain"));
         domainRepository.deleteById(id);
     }
 }

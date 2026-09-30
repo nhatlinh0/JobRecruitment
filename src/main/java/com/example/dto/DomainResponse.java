@@ -11,7 +11,9 @@ public class DomainResponse {
     private String name;
 
     public DomainResponse (Domain domain) {
-        this.id = domain.getId();
-        this.name = domain.getName();
+        if (domain != null) {
+            this.id = domain.getId();
+            this.name = domain.getName();
+        }
     }
 }
