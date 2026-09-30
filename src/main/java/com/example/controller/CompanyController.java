@@ -33,13 +33,13 @@ public class CompanyController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/id")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateCompany(@Valid @RequestBody CompanyRequest companyRequest, @PathVariable Integer id) {
         companyService.updateCompany(companyRequest, id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/id")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCompany(@PathVariable Integer id) {
         companyService.deleteCompany(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -10,6 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface CompanyRepository extends JpaRepository<Company, Integer> {
     @Modifying
     @Transactional
-    @Query("UPDATE Company SET Company.industry = NULL WHERE Company.industry.id = :industryId")
+    @Query("UPDATE Company c SET c.industry = NULL WHERE c.industry.id = :industryId")
     void clearIndustry(@Param("industryId") Integer id);
 }

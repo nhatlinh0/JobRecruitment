@@ -1,8 +1,10 @@
 package com.example.controller;
 
+import com.example.dto.DomainRequest;
 import com.example.dto.DomainResponse;
 import com.example.entity.Domain;
 import com.example.service.DomainService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,23 +24,15 @@ public class DomainController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> updateDomain(@RequestBody Domain domain) {
-        if (domain.getName() != null && domain.getName() != "") {
-            domainService.saveDomain(domain);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> updateDomain(@Valid @RequestBody DomainRequest domainRequest) {
+        domainService.saveDomain(domainRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> createDomain(@RequestBody Domain domain, @PathVariable Integer id) {
-        if (domain.getName() != null && domain.getName() != "") {
-            domainService.updateDomain(domain, id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> createDomain(@Valid @RequestBody DomainRequest domainRequest, @PathVariable Integer id) {
+        domainService.updateDomain(domainRequest, id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

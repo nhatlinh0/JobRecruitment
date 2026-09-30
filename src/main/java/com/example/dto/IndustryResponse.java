@@ -7,11 +7,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class IndustryResponse {
+    private  Integer id;
     private String name;
     private String description;
 
     public IndustryResponse (Industry industry) {
         if (industry != null) {
+            this.id = industry.getId();
             this.name = industry.getName();
             this.description = industry.getDescription();
         }

@@ -10,6 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface UserInfoRepository extends JpaRepository<UserInfo, Integer> {
     @Modifying
     @Transactional
-    @Query("UPDATE UserInfo SET UserInfo.domain = NULL WHERE UserInfo.domain.id = :domainId")
+    @Query("UPDATE UserInfo u SET u.domain = NULL WHERE u.domain.id = :domainId")
     void clearDomain(@Param("domainId") Integer id);
 }

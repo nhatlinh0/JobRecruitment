@@ -15,6 +15,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE User SET User.company = NULL WHERE User.company.id = :companyId")
+    @Query("UPDATE User u SET u.company = NULL WHERE u.company.id = :companyId")
     void clearCompany(@Param("companyId") Integer id);
 }

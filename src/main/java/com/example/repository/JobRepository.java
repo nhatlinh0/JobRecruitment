@@ -10,6 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface JobRepository extends JpaRepository<Job, Integer> {
     @Modifying
     @Transactional
-    @Query("UPDATE Job SET Job.domain = NULL WHERE Job.domain.id = :domainId")
+    @Query("UPDATE Job j SET j.domain = NULL WHERE j.domain.id = :domainId")
     void clearDomain(@Param("domainId") Integer id);
 }

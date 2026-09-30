@@ -8,6 +8,7 @@ import com.example.repository.DomainRepository;
 import com.example.repository.SkillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,19 +20,22 @@ public class SkillService {
     @Autowired
     private DomainRepository domainRepository;
 
-    public void saveSkill(SkillRequest skillRequest) {
-        Domain domain = domainRepository.findById(skillRequest.getDomainId()).orElseThrow(() -> new RuntimeException("Không tìm thấy domain"));
+    @Transactional
+    public void saveSkill(SkillRequest skillRequest, Integer domainId) {
+        Domain domain = domainRepository.findById(domainId).orElseThrow(() -> new RuntimeException("Không tìm thấy domain"));
         Skill skill = new Skill();
         skill.setName(skillRequest.getName());
-        skill.setDomain(domain);
+        skill.setSlug(skillRequest.getSlug());
+
         skillRepository.save(skill);
+        domain.getSkills().add(skill);
+        domainRepository.save(domain);
     }
 
     public void updateSkill(SkillRequest skillRequest, Integer id) {
         Skill skill = skillRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy skill"));
-        Domain domain = domainRepository.findById(skillRequest.getDomainId()).orElseThrow(() -> new RuntimeException("Không tìm thấy domain"));
         skill.setName(skillRequest.getName());
-        skill.setDomain(domain);
+        skill.setSlug(skillRequest.getSlug());
         skillRepository.save(skill);
     }
 

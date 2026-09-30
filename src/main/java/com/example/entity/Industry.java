@@ -26,7 +26,7 @@ public class Industry {
     @Column(nullable = false, unique = true, length = 100)
     private String name;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true, length = 200)
     private String description;
 
     @CreationTimestamp

@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.dto.DomainRequest;
 import com.example.dto.DomainResponse;
 import com.example.entity.Domain;
 import com.example.repository.DomainRepository;
@@ -23,14 +24,18 @@ public class DomainService {
     @Autowired
     private UserInfoRepository userInfoRepository;
 
-    public void saveDomain(Domain domain) {
-         domainRepository.save(domain);
+    public void saveDomain(DomainRequest domainRequest) {
+        Domain domain = new Domain();
+        domain.setName(domainRequest.getName());
+        domain.setSlug(domainRequest.getSlug());
+        domainRepository.save(domain);
     }
 
-    public void updateDomain (Domain domain, Integer id) {
-        Domain newDomain = domainRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy domain"));
-        newDomain.setName(domain.getName());
-         domainRepository.save(newDomain);
+    public void updateDomain (DomainRequest domainRequest, Integer id) {
+        Domain domain = domainRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy domain"));
+        domain.setName(domainRequest.getName());
+        domain.setSlug(domainRequest.getSlug());
+        domainRepository.save(domain);
     }
 
     public List<DomainResponse> findAll() {

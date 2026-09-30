@@ -27,9 +27,9 @@ public class SkillController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<?> createSkill(@Valid @RequestBody SkillRequest skillRequest){
-        skillService.saveSkill(skillRequest);
+    @PostMapping("/domain/{domainId}")
+    public ResponseEntity<?> createSkill(@Valid @RequestBody SkillRequest skillRequest, @PathVariable Integer domainId){
+        skillService.saveSkill(skillRequest, domainId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

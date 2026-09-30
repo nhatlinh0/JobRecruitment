@@ -8,13 +8,15 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SkillResponse {
+    private Integer id;
     private String name;
-    private String domainName;
+    private String slug;
 
     public SkillResponse (Skill skill) {
         if (skill != null) {
+            this.id = skill.getId();
             this.name = skill.getName();
-            this.domainName = skill.getDomain().getName();
+            this.slug = skill.getSlug();
         }
     }
 }

@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CompanyResponse {
+    private  Integer id;
     private String name;
     private String address;
     private String companySize;
@@ -19,6 +20,7 @@ public class CompanyResponse {
     private String createAt;
 
     public CompanyResponse(Company company) {
+        this.id = company.getId();
         this.name = company.getName();
         this.address = company.getAddress();
         this.companySize = company.getCompanySize();

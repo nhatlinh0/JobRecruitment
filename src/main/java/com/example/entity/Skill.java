@@ -21,9 +21,11 @@ public class Skill {
     @Column(name = "name", length = 100, nullable = false, unique = true)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn( name = "domain_id", nullable = false)
-    private Domain domain;
+    @Column(name = "slug", nullable = false, unique = true, length = 100)
+    private String slug;
+
+    @ManyToMany(mappedBy = "skills")
+    private Set<Domain> domains;
 
     @ManyToMany(mappedBy = "skills")
     private Set<Job> jobs = new HashSet<>();
