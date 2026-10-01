@@ -13,7 +13,9 @@ import com.example.repository.JobRepository;
 import com.example.repository.SkillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -57,9 +59,13 @@ public class JobService {
         job.setSalaryMax(jobRequest.getSalaryMax());
         job.setSalaryNegotiable(jobRequest.getSalaryNegotiable());
         job.setCity(jobRequest.getCity());
-        for (Integer id : jobRequest.getSkillIds()) {
-            Skill skill = skillRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy skill"));
-            job.getSkills().add(skill);
+
+        List<Skill> newSkills = skillRepository.findAllById(jobRequest.getSkillIds());
+        if (job.getSkills() == null) {
+            job.setSkills(new HashSet<>(newSkills));
+        } else {
+            job.getSkills().clear();
+            job.getSkills().addAll(newSkills);
         }
 
         jobRepository.save(job);
@@ -85,9 +91,13 @@ public class JobService {
         job.setSalaryMax(jobRequest.getSalaryMax());
         job.setSalaryNegotiable(jobRequest.getSalaryNegotiable());
         job.setCity(jobRequest.getCity());
-        for (Integer id : jobRequest.getSkillIds()) {
-            Skill skill = skillRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy skill"));
-            job.getSkills().add(skill);
+
+        List<Skill> newSkills = skillRepository.findAllById(jobRequest.getSkillIds());
+        if (job.getSkills() == null) {
+            job.setSkills(new HashSet<>(newSkills));
+        } else {
+            job.getSkills().clear();
+            job.getSkills().addAll(newSkills);
         }
 
         jobRepository.save(job);
@@ -95,6 +105,14 @@ public class JobService {
 
     public void deleteJob(Integer id) {
         jobRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteJobSkills(Integer jobId, Integer skillId) {
+        Job job = jobRepository.findById(jobId).orElseThrow(() -> new RuntimeException("Không tìm thấy job"));
+        Skill skill = skillRepository.findById(skillId).orElseThrow(() -> new RuntimeException("Không tìm thấy skill"));
+        job.getSkills().remove(skill);
+        jobRepository.save(job);
     }
 
     public void validateJob(JobRequest jobRequest) {

@@ -33,6 +33,12 @@ public class SkillController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/domain/{domainId}/skill/{skillId}")
+    public ResponseEntity<?> deleteSkillFromDomain(@PathVariable Integer skillId, @PathVariable Integer domainId){
+        skillService.deleteSkillFromDomain(skillId, domainId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateSkill(@Valid @RequestBody SkillRequest skillRequest, @PathVariable Integer id){
         skillService.updateSkill(skillRequest ,id);

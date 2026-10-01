@@ -1,12 +1,16 @@
 package com.example.dto;
 
 import com.example.entity.Job;
+import com.example.entity.Skill;
 import com.example.enums.Status;
 import com.example.enums.WorkingType;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -29,6 +33,7 @@ public class JobResponse {
     private Boolean salaryNegotiable;
     private String city;
     private Status status;
+    private Set<String> skills;
 
     public JobResponse(Job job) {
         this.id = job.getId();
@@ -49,5 +54,6 @@ public class JobResponse {
         this.salaryNegotiable = job.getSalaryNegotiable();
         this.city = job.getCity();
         this.status = job.getStatus();
+        this.skills = job.getSkills().stream().map(Skill::getName).collect(Collectors.toSet());
     }
 }

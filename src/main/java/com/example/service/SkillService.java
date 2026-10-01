@@ -32,6 +32,15 @@ public class SkillService {
         domainRepository.save(domain);
     }
 
+    @Transactional
+    public void deleteSkillFromDomain(Integer skillId, Integer domainId) {
+        Domain domain = domainRepository.findById(domainId).orElseThrow(() -> new RuntimeException("Không tìm thấy domain"));
+        Skill skill = skillRepository.findById(skillId).orElseThrow(() -> new RuntimeException("Không tìm thấy skill"));
+
+        domain.getSkills().remove(skill);
+        domainRepository.save(domain);
+    }
+
     public void updateSkill(SkillRequest skillRequest, Integer id) {
         Skill skill = skillRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy skill"));
         skill.setName(skillRequest.getName());
