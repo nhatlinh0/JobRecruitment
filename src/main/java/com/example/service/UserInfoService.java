@@ -22,24 +22,9 @@ public class UserInfoService {
     private DomainRepository domainRepository;
 
     public UserInfo saveUserInfo(UserInfoRequest userInfoRequest, String email) {
-        boolean isNegotiable = userInfoRequest.isSalaryNegotiable();
-        if (isNegotiable) {
-            if (userInfoRequest.getSalaryMin() != null || userInfoRequest.getSalaryMax() != null) {
-                throw new IllegalArgumentException("Khi chọn thỏa thuận lương, không được nhập Lương tối thiểu và Lương tối đa.");
-            }
-        } else if (!isNegotiable) {
-            if (userInfoRequest.getSalaryMin() == null || userInfoRequest.getSalaryMax() == null) {
-                throw new IllegalArgumentException("Vui lòng nhập đầy đủ Lương tối thiểu và Lương tối đa.");
-            }
+        validateUserInfo(userInfoRequest);
 
-            if (userInfoRequest.getSalaryMin() > userInfoRequest.getSalaryMax()) {
-                throw new IllegalArgumentException("Lương tối thiểu không được lớn hơn Lương tối đa.");
-            }
-        }
-        if (userInfoRequest.getExperienceMin() > userInfoRequest.getExperienceMax()) {
-            throw new IllegalArgumentException("Kinh nghiệm tối thiểu không được lớn hơn kinh nghiệm tối đa.");
-        }
-
+//        BASIC
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User không tồn tại\""));
         Domain domain = domainRepository.findById(userInfoRequest.getDomainId()).orElseThrow(()->new RuntimeException("Role không tồn tại"));
 
@@ -60,24 +45,9 @@ public class UserInfoService {
     }
 
     public UserInfo updateUserInfo(UserInfoRequest userInfoRequest, String email) {
-        boolean isNegotiable = userInfoRequest.isSalaryNegotiable();
-        if (isNegotiable) {
-            if (userInfoRequest.getSalaryMin() != null || userInfoRequest.getSalaryMax() != null) {
-                throw new IllegalArgumentException("Khi chọn thỏa thuận lương, không được nhập Lương tối thiểu và Lương tối đa.");
-            }
-        } else if (!isNegotiable) {
-            if (userInfoRequest.getSalaryMin() == null || userInfoRequest.getSalaryMax() == null) {
-                throw new IllegalArgumentException("Vui lòng nhập đầy đủ Lương tối thiểu và Lương tối đa.");
-            }
+        validateUserInfo(userInfoRequest);
 
-            if (userInfoRequest.getSalaryMin() > userInfoRequest.getSalaryMax()) {
-                throw new IllegalArgumentException("Lương tối thiểu không được lớn hơn Lương tối đa.");
-            }
-        }
-        if (userInfoRequest.getExperienceMin() > userInfoRequest.getExperienceMax()) {
-            throw new IllegalArgumentException("Kinh nghiệm tối thiểu không được lớn hơn kinh nghiệm tối đa.");
-        }
-
+        //        BASIC
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User không tồn tại\""));
         Domain domain = domainRepository.findById(userInfoRequest.getDomainId()).orElseThrow(()->new RuntimeException("Role không tồn tại"));
 
@@ -101,8 +71,23 @@ public class UserInfoService {
         return userInfo;
     }
 
-    public void deleteUserInfo (UserInfo userInfo) {
-        int id = userInfo.getUser().getId();
-        userRepository.deleteById(id);
+    public void validateUserInfo(UserInfoRequest userInfoRequest) {
+        boolean isNegotiable = userInfoRequest.isSalaryNegotiable();
+        if (isNegotiable) {
+            if (userInfoRequest.getSalaryMin() != null || userInfoRequest.getSalaryMax() != null) {
+                throw new IllegalArgumentException("Khi chọn thỏa thuận lương, không được nhập Lương tối thiểu và Lương tối đa.");
+            }
+        } else if (!isNegotiable) {
+            if (userInfoRequest.getSalaryMin() == null || userInfoRequest.getSalaryMax() == null) {
+                throw new IllegalArgumentException("Vui lòng nhập đầy đủ Lương tối thiểu và Lương tối đa.");
+            }
+
+            if (userInfoRequest.getSalaryMin() > userInfoRequest.getSalaryMax()) {
+                throw new IllegalArgumentException("Lương tối thiểu không được lớn hơn Lương tối đa.");
+            }
+        }
+        if (userInfoRequest.getExperienceMin() > userInfoRequest.getExperienceMax()) {
+            throw new IllegalArgumentException("Kinh nghiệm tối thiểu không được lớn hơn kinh nghiệm tối đa.");
+        }
     }
 }

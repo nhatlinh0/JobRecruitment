@@ -8,6 +8,7 @@ import com.example.repository.CompanyRepository;
 import com.example.repository.IndustryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -37,8 +38,8 @@ public class IndustryService {
         return industryRepository.findAll().stream().map((x) -> new IndustryResponse(x)).toList();
     }
 
+    @Transactional
     public void deleteIndustry(Integer id) {
-        industryRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy industry"));
         companyRepository.clearIndustry(id);
         industryRepository.deleteById(id);
     }

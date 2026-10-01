@@ -74,7 +74,6 @@ public class CompanyService {
 
     @Transactional
     public void deleteCompany(Integer id) {
-        companyRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy company"));
         userRepository.clearCompany(id);
         companyRepository.deleteById(id);
     }

@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import com.example.enums.Status;
 import com.example.enums.WorkingType;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -65,6 +66,10 @@ public class Job {
     @Lob
     @Column(name = "benefits", columnDefinition = "nvarchar(MAX)")
     private String benefits;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 30, nullable = false)
+    private Status status = Status.PENDING;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

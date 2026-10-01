@@ -44,7 +44,6 @@ public class DomainService {
 
     @Transactional
     public void deleteDomain(Integer id) {
-        domainRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy domain"));
         jobRepository.clearDomain(id);
         userInfoRepository.clearDomain(id);
         domainRepository.deleteById(id);
