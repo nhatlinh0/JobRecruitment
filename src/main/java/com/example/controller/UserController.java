@@ -18,7 +18,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/v1/users")
 public class UserController {
     @Autowired
     private UserService userService;;
@@ -39,7 +39,6 @@ public class UserController {
             User savedUser = userService.saveUser(userRequest);
             return ResponseEntity.ok(new UserResponse(savedUser));
         } catch (Exception e) {
-            log.error("Error: "+e);
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         }
     }
@@ -50,7 +49,6 @@ public class UserController {
             User updatedUser = userService.updateUser(userRequest, id);
             return ResponseEntity.ok(new UserResponse(updatedUser));
         } catch (Exception e) {
-            log.error("Error: "+e);
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         }
     }

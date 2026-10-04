@@ -71,6 +71,10 @@ public class Job {
     @Column(name = "status", length = 30, nullable = false)
     private Status status = Status.PENDING;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "approved", length = 30, nullable = false)
+    private Status approved = Status.PENDING;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

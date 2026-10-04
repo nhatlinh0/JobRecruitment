@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/job")
+@RequestMapping("/api/v1/jobs")
 public class JobController {
     @Autowired
     private JobService jobService;
@@ -24,6 +24,21 @@ public class JobController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findJobById() {
+
+    }
+
+    @GetMapping("/{skillSlug}")
+    public ResponseEntity<?> findJobBySkillSlug() {
+
+    }
+
+    @GetMapping("/{domainSlug}")
+    public ResponseEntity<?> findJobByDomainSlug() {
+
     }
 
     @PostMapping

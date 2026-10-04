@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/skill")
+@RequestMapping("/api/v1/skills")
 public class SkillController {
     @Autowired
     private SkillService skillService;

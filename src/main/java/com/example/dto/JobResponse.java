@@ -33,6 +33,7 @@ public class JobResponse {
     private Boolean salaryNegotiable;
     private String city;
     private Status status;
+    private Status approved;
     private Set<String> skills;
 
     public JobResponse(Job job) {
@@ -54,6 +55,7 @@ public class JobResponse {
         this.salaryNegotiable = job.getSalaryNegotiable();
         this.city = job.getCity();
         this.status = job.getStatus();
+        this.approved = job.getApproved();
         this.skills = job.getSkills().stream().map(Skill::getName).collect(Collectors.toSet());
     }
 }

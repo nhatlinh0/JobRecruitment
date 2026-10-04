@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user-info")
+@RequestMapping("api/v1/user-infos")
 public class UserInfoController {
     @Autowired
     private UserInfoService userInfoService;

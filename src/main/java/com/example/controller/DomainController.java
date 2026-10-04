@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/domain")
+@RequestMapping("/api/v1/domains")
 public class DomainController {
     @Autowired
     private DomainService domainService;
