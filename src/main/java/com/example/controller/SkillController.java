@@ -27,17 +27,17 @@ public class SkillController {
         }
     }
 
-    @PostMapping("/domain/{domainId}")
-    public ResponseEntity<?> createSkill(@Valid @RequestBody SkillRequest skillRequest, @PathVariable Integer domainId){
-        skillService.saveSkill(skillRequest, domainId);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    @DeleteMapping("/domain/{domainId}/skill/{skillId}")
-    public ResponseEntity<?> deleteSkillFromDomain(@PathVariable Integer skillId, @PathVariable Integer domainId){
-        skillService.deleteSkillFromDomain(skillId, domainId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+//    @PostMapping("/domain/{domainId}")
+//    public ResponseEntity<?> createSkill(@Valid @RequestBody SkillRequest skillRequest, @PathVariable Integer domainId){
+//        skillService.saveSkill(skillRequest, domainId);
+//        return new ResponseEntity<>(HttpStatus.CREATED);
+//    }
+//
+//    @DeleteMapping("/domain/{domainId}/skill/{skillId}")
+//    public ResponseEntity<?> deleteSkillFromDomain(@PathVariable Integer skillId, @PathVariable Integer domainId){
+//        skillService.deleteSkillFromDomain(skillId, domainId);
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateSkill(@Valid @RequestBody SkillRequest skillRequest, @PathVariable Integer id){
@@ -46,7 +46,7 @@ public class SkillController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteIndustry(@PathVariable Integer id) {
+    public ResponseEntity<?> deleteSkill(@PathVariable Integer id) {
         skillService.deleteSkill(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

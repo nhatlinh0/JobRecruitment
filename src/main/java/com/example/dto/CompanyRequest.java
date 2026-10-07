@@ -13,6 +13,10 @@ public class CompanyRequest {
     @Size(max = 255, message = "Name tối đa 255 ký tự")
     private String name;
 
+    @NotBlank(message = "Slug không được để trống")
+    @Size(max = 255, message = "Slug tối đa 255 ký tự")
+    private String slug;
+
     @NotBlank(message = "Address không được để trống")
     @Size(max = 500, message = "Address tối đa 500 ký tự")
     private String address;

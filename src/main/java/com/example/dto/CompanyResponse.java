@@ -9,6 +9,7 @@ import lombok.Setter;
 public class CompanyResponse {
     private  Integer id;
     private String name;
+    private String slug;
     private String address;
     private String companySize;
     private String phone;
@@ -22,6 +23,7 @@ public class CompanyResponse {
     public CompanyResponse(Company company) {
         this.id = company.getId();
         this.name = company.getName();
+        this.slug = company.getSlug();
         this.address = company.getAddress();
         this.companySize = company.getCompanySize();
         this.phone = company.getPhone();

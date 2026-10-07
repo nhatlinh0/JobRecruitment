@@ -2,6 +2,8 @@ package com.example.controller;
 
 import com.example.dto.DomainRequest;
 import com.example.dto.DomainResponse;
+import com.example.dto.SkillRequest;
+import com.example.dto.SkillResponse;
 import com.example.entity.Domain;
 import com.example.service.DomainService;
 import jakarta.validation.Valid;
@@ -27,6 +29,24 @@ public class DomainController {
     public ResponseEntity<?> updateDomain(@Valid @RequestBody DomainRequest domainRequest) {
         domainService.saveDomain(domainRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{domainId}")
+    public ResponseEntity<List<SkillResponse>> getSkillsDomain (@PathVariable Integer domainId) {
+        List<SkillResponse> skills = domainService.getSkillsFromDomain(domainId);
+        return ResponseEntity.ok(skills);
+    }
+
+    @PostMapping("/{domainId}/skill")
+    public ResponseEntity<?> createSkillFromDomain(@Valid @RequestBody SkillRequest skillRequest, @PathVariable Integer domainId){
+        domainService.saveSkillFromDomain(skillRequest, domainId);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("{domainId}/skill/{skillId}")
+    public ResponseEntity<?> deleteSkillFromDomain(@PathVariable Integer skillId, @PathVariable Integer domainId){
+        domainService.deleteSkillFromDomain(skillId, domainId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")

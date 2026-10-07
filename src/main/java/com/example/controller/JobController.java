@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.dto.JobRequest;
 import com.example.dto.JobResponse;
+import com.example.entity.Job;
 import com.example.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,18 +28,21 @@ public class JobController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findJobById() {
-
+    public ResponseEntity<Job> findJobById(@PathVariable Integer id) {
+        Job job = jobService.findJobById(id);
+        return ResponseEntity.ok(job);
     }
 
     @GetMapping("/{skillSlug}")
-    public ResponseEntity<?> findJobBySkillSlug() {
-
+    public ResponseEntity<List<JobResponse>> findJobBySkillSlug(@PathVariable String skillSlug) {
+        List<JobResponse> list = jobService.findJobsBySkillSlug(skillSlug);
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{domainSlug}")
-    public ResponseEntity<?> findJobByDomainSlug() {
-
+    public ResponseEntity<?> findJobByDomainSlug(@PathVariable String domainSlug) {
+        List<JobResponse> list = jobService.findJobsByDomainSlug(domainSlug);
+        return ResponseEntity.ok(list);
     }
 
     @PostMapping
@@ -59,9 +63,9 @@ public class JobController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/{jobId}/skill/{skillId}")
-    public ResponseEntity<?> deleteJobSkills(@PathVariable Integer jobId, @PathVariable Integer skillId) {
-        jobService.deleteJobSkills(jobId, skillId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+//    @DeleteMapping("/{jobId}/skill/{skillId}")
+//    public ResponseEntity<?> deleteJobSkills(@PathVariable Integer jobId, @PathVariable Integer skillId) {
+//        jobService.deleteJobSkills(jobId, skillId);
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
 }

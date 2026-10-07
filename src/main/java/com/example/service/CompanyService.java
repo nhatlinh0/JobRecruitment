@@ -43,6 +43,7 @@ public class CompanyService {
 
         Company company = new Company();
         company.setName(companyRequest.getName());
+        company.setSlug(companyRequest.getSlug());
         company.setAddress(companyRequest.getAddress());
         company.setCompanySize(companyRequest.getCompanySize());
         company.setPhone(companyRequest.getPhone());
@@ -62,6 +63,7 @@ public class CompanyService {
         Company company = companyRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy Industry"));
 
         company.setName(companyRequest.getName());
+        company.setSlug(companyRequest.getSlug());
         company.setAddress(companyRequest.getAddress());
         company.setCompanySize(companyRequest.getCompanySize());
         company.setPhone(companyRequest.getPhone());

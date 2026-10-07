@@ -14,6 +14,7 @@ import com.example.repository.SkillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -61,12 +62,7 @@ public class JobService {
         job.setCity(jobRequest.getCity());
 
         List<Skill> newSkills = skillRepository.findAllById(jobRequest.getSkillIds());
-        if (job.getSkills() == null) {
-            job.setSkills(new HashSet<>(newSkills));
-        } else {
-            job.getSkills().clear();
-            job.getSkills().addAll(newSkills);
-        }
+        job.setSkills(new HashSet<>(newSkills));
 
         jobRepository.save(job);
     }
@@ -93,12 +89,7 @@ public class JobService {
         job.setCity(jobRequest.getCity());
 
         List<Skill> newSkills = skillRepository.findAllById(jobRequest.getSkillIds());
-        if (job.getSkills() == null) {
-            job.setSkills(new HashSet<>(newSkills));
-        } else {
-            job.getSkills().clear();
-            job.getSkills().addAll(newSkills);
-        }
+        job.setSkills(new HashSet<>(newSkills));
 
         jobRepository.save(job);
     }
@@ -107,12 +98,24 @@ public class JobService {
         jobRepository.deleteById(id);
     }
 
-    @Transactional
-    public void deleteJobSkills(Integer jobId, Integer skillId) {
-        Job job = jobRepository.findById(jobId).orElseThrow(() -> new RuntimeException("Không tìm thấy job"));
-        Skill skill = skillRepository.findById(skillId).orElseThrow(() -> new RuntimeException("Không tìm thấy skill"));
-        job.getSkills().remove(skill);
-        jobRepository.save(job);
+    public Job findJobById(Integer id) {
+        return jobRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy Job"));
+    }
+
+    public List<JobResponse> findJobsBySkillSlug(String slug) {
+        List<Job> list = jobRepository.findBySkillsSlug(slug);
+        if (list.isEmpty()) {
+            throw new RuntimeException("Domain not found with slug: " + slug);
+        }
+        return list.stream().map(JobResponse::new).toList();
+    }
+
+    public List<JobResponse> findJobsByDomainSlug(String slug) {
+        List<Job> list = jobRepository.findByDomainSlug(slug);
+        if (list.isEmpty()) {
+            throw new RuntimeException("Domain not found with slug: " + slug);
+        }
+        return list.stream().map(JobResponse::new).toList();
     }
 
     public void validateJob(JobRequest jobRequest) {

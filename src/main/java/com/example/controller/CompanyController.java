@@ -27,21 +27,26 @@ public class CompanyController {
         }
     }
 
-    //ADMIN
-    @GetMapping("/{id}")
-    public ResponseEntity<?> findCompanyId() {
+//    //ADMIN
+//    @GetMapping("/{id}")
+//    public ResponseEntity<?> findCompanyId() {
+//
+//    }
+//
+//    @GetMapping("/{domainSlug}")
+//    public ResponseEntity<?> findCompaniesByDomainSlug() {
+//
+//    }
 
-    }
-
-    @GetMapping("/{domainSlug}")
-    public ResponseEntity<?> findCompaniesByDomainSlug() {
-
-    }
-
-    @GetMapping("/{id}/jobs")
-    public ResponseEntity<?> findJobsByCompany() {
-
-    }
+//    @GetMapping("/{slug}")
+//    public ResponseEntity<?> findCompaniesBySlug() {
+//
+//    }
+//
+//    @GetMapping("/{id}/jobs")
+//    public ResponseEntity<?> findJobsByCompany() {
+//
+//    }
 
     @PostMapping
     public ResponseEntity<?> createCompany(@Valid @RequestBody CompanyRequest companyRequest) {

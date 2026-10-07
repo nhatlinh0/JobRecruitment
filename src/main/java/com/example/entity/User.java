@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import com.example.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,6 +29,10 @@ public class User {
 
     @Column(name = "username", length = 50, nullable = false)
     private String username;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 30, nullable = false)
+    private UserStatus status = UserStatus.ACTIVE;
 
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)

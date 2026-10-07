@@ -23,6 +23,9 @@ public class Company {
     @Column(name = "name", length = 255, nullable = false)
     private String name;
 
+    @Column(name = "slug", length = 255, nullable = false)
+    private String slug;
+
     @Column(name = "address", length = 500, nullable = false)
     private String address;
 
