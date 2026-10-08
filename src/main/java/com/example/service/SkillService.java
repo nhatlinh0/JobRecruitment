@@ -20,7 +20,12 @@ public class SkillService {
     @Autowired
     private DomainRepository domainRepository;
 
-    @Transactional
+    public List<SkillResponse> getSkillsFromDomain(Integer domainId) {
+        Domain domain = domainRepository.findById(domainId).orElseThrow(() -> new RuntimeException("Không tìm thấy domain"));
+        return domain.getSkills().stream().map((x) -> new SkillResponse(x)).toList();
+    }
+
+    @Transactional()
     public void saveSkill(SkillRequest skillRequest, Integer domainId) {
         Domain domain = domainRepository.findById(domainId).orElseThrow(() -> new RuntimeException("Không tìm thấy domain"));
         Skill skill = new Skill();

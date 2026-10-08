@@ -102,10 +102,14 @@ public class JobService {
         return jobRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy Job"));
     }
 
+    public Job findJobBySlug(String slug) {
+        return jobRepository.findBySlug(slug).orElseThrow(() -> new RuntimeException("Không tìm thấy Job"));
+    }
+
     public List<JobResponse> findJobsBySkillSlug(String slug) {
         List<Job> list = jobRepository.findBySkillsSlug(slug);
         if (list.isEmpty()) {
-            throw new RuntimeException("Domain not found with slug: " + slug);
+            throw new RuntimeException("Job not found with skill slug: " + slug);
         }
         return list.stream().map(JobResponse::new).toList();
     }
@@ -113,7 +117,15 @@ public class JobService {
     public List<JobResponse> findJobsByDomainSlug(String slug) {
         List<Job> list = jobRepository.findByDomainSlug(slug);
         if (list.isEmpty()) {
-            throw new RuntimeException("Domain not found with slug: " + slug);
+            throw new RuntimeException("Job not found with domain slug: " + slug);
+        }
+        return list.stream().map(JobResponse::new).toList();
+    }
+
+    public List<JobResponse> findJobsByCompanySlug(String companySlug) {
+        List<Job> list = jobRepository.findByCompanySlug(companySlug);
+        if (list.isEmpty()) {
+            throw new RuntimeException("Job not found with company slug: " + companySlug);
         }
         return list.stream().map(JobResponse::new).toList();
     }

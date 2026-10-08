@@ -24,8 +24,11 @@ public class Job {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "title", length = 255, nullable = false)
+    @Column(name = "title", length = 255, nullable = false, unique = true)
     private String title;
+
+    @Column(name = "slug", length = 255, nullable = false, unique = true)
+    private String slug;
 
     @Column(name = "address", length = 255)
     private String address;

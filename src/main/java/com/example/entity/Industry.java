@@ -29,6 +29,9 @@ public class Industry {
     @Column(nullable = false, unique = true, length = 200)
     private String description;
 
+    @Column(nullable = false, unique = true, length = 255)
+    private String slug;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createAt;

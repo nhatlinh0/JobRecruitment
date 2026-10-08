@@ -20,7 +20,7 @@ public class Domain {
     @EqualsAndHashCode.Include
     private Integer id;
 
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(name = "name", nullable = false, unique = true, length = 100)
     private String name;
 
     @Column(name = "slug", nullable = false, unique = true, length = 100)

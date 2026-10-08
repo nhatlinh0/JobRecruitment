@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.example.dto.CompanyRequest;
 import com.example.dto.CompanyResponse;
+import com.example.dto.JobResponse;
 import com.example.entity.Company;
 import com.example.entity.Industry;
 import com.example.entity.User;
@@ -29,6 +30,23 @@ public class CompanyService {
     public List<CompanyResponse> getAllCompany() {
         return companyRepository.findAll().stream().map((x) -> new CompanyResponse(x)).toList();
     }
+
+    public Company findByCompanyId(Integer id) {
+        return companyRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy Company"));
+    }
+
+    public Company findByCompanySlug(String slug) {
+        return companyRepository.findBySlug(slug).orElseThrow(() -> new RuntimeException("Không tìm thấy Company"));
+    }
+
+    public List<CompanyResponse> findCompanyByIndustrySlug(String slug) {
+        List<Company> list = companyRepository.findByIndustrySlug(slug);
+        if (list.isEmpty()) {
+            throw new RuntimeException("Company not found with slug: " + slug);
+        }
+        return list.stream().map(CompanyResponse::new).toList();
+    }
+
 
     @Transactional
     public void saveCompany(CompanyRequest companyRequest) {

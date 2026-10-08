@@ -20,5 +20,6 @@ public interface JobRepository extends JpaRepository<Job, Integer> {
 
     List<Job> findByDomainSlug(String domainSlug);
     List<Job> findBySkillsSlug(String skillSlug);
+    List<Job> findByCompanySlug(String companySlug);
 
 }
