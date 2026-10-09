@@ -58,8 +58,8 @@ public class UserInfo {
     @ManyToMany
     @JoinTable(
             name = "user_skills",
-            joinColumns = @JoinColumn(name = "skill_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_info_id")
+            joinColumns = @JoinColumn(name = "user_info_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
     )
     private Set<Skill> skills = new HashSet<>();
 }
