@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public class JobResponse {
     private Integer id;
     private String title;
+    private String slug;
     private String companyName;
     private String address;
     private String endDate;
@@ -38,6 +39,7 @@ public class JobResponse {
     public JobResponse(Job job) {
         this.id = job.getId();
         this.title = job.getTitle();
+        this.slug = job.getSlug();
         this.companyName = job.getCompany().getName();
         this.address = job.getAddress();
         this.endDate = job.getEndDate().toString();

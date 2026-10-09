@@ -1,13 +1,13 @@
 package com.example.dto;
 
 import com.example.enums.WorkingType;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -35,4 +35,9 @@ public class UserInfoRequest {
 
     @Size(max = 50, message = "Username tối đa 50 ký tự")
     private String username;
+
+    @NotEmpty
+    @Size(max = 10, message = "Tối đa 10 skills")
+    @JsonProperty("skill_ids")
+    private Set<Integer> skillIds;
 }

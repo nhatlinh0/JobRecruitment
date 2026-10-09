@@ -46,6 +46,7 @@ public class JobService {
 
         Job job = new Job();
         job.setTitle(jobRequest.getTitle());
+        job.setSlug(jobRequest.getSlug());
         job.setCompany(company);
         job.setAddress(jobRequest.getAddress());
         job.setEndDate(jobRequest.getEndDate());
@@ -74,6 +75,7 @@ public class JobService {
         Job job = jobRepository.findById(jobId).orElseThrow(() -> new RuntimeException("Không tìm thấy job"));
 
         job.setTitle(jobRequest.getTitle());
+        job.setSlug(jobRequest.getSlug());
         job.setAddress(jobRequest.getAddress());
         job.setEndDate(jobRequest.getEndDate());
         job.setWorkingType(jobRequest.getWorkingType());

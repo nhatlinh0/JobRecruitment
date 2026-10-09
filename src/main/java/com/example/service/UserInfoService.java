@@ -2,13 +2,19 @@ package com.example.service;
 
 import com.example.dto.UserInfoRequest;
 import com.example.entity.Domain;
+import com.example.entity.Skill;
 import com.example.entity.User;
 import com.example.entity.UserInfo;
 import com.example.repository.DomainRepository;
+import com.example.repository.SkillRepository;
 import com.example.repository.UserInfoRepository;
 import com.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.List;
 
 @Service
 public class UserInfoService {
@@ -21,12 +27,16 @@ public class UserInfoService {
     @Autowired
     private DomainRepository domainRepository;
 
+    @Autowired
+    private SkillRepository skillRepository;
+
     public UserInfo saveUserInfo(UserInfoRequest userInfoRequest, String email) {
         validateUserInfo(userInfoRequest);
 
 //        BASIC
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User không tồn tại\""));
         Domain domain = domainRepository.findById(userInfoRequest.getDomainId()).orElseThrow(()->new RuntimeException("Role không tồn tại"));
+        List<Skill> list = skillRepository.findAllById(userInfoRequest.getSkillIds());
 
         UserInfo userInfo = new UserInfo();
         userInfo.setUser(user);
@@ -40,6 +50,7 @@ public class UserInfoService {
         userInfo.setImage(userInfoRequest.getImage());
         userInfo.setDomain(domain);
         userInfo.setUsername(userInfoRequest.getUsername());
+        userInfo.setSkills(new HashSet<>(list));
 
         return userInfoRepository.save(userInfo);
     }
@@ -50,6 +61,7 @@ public class UserInfoService {
         //        BASIC
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User không tồn tại\""));
         Domain domain = domainRepository.findById(userInfoRequest.getDomainId()).orElseThrow(()->new RuntimeException("Role không tồn tại"));
+        List<Skill> list = skillRepository.findAllById(userInfoRequest.getSkillIds());
 
         UserInfo userInfo = user.getUserInfo();
         userInfo.setSalaryMax(userInfoRequest.getSalaryMax());
@@ -62,13 +74,16 @@ public class UserInfoService {
         userInfo.setImage(userInfoRequest.getImage());
         userInfo.setDomain(domain);
         userInfo.setUsername(userInfoRequest.getUsername());
+        userInfo.setSkills(new HashSet<>(list));
 
         return userInfoRepository.save(userInfo);
     }
 
-    public UserInfo findUserInfo(Integer id) {
-        UserInfo userInfo = userInfoRepository.findById(id).orElseThrow(()-> new RuntimeException("Không tìm thấy UserInfo"));
-        return userInfo;
+    public UserInfo findUserInfo() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user =userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Không tìm thấy User"));
+
+        return  user.getUserInfo();
     }
 
     public void validateUserInfo(UserInfoRequest userInfoRequest) {

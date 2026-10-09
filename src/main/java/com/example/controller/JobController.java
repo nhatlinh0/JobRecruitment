@@ -29,11 +29,11 @@ public class JobController {
 
 //    ADMIN
     @GetMapping("/id/{id}")
-    public ResponseEntity<Job> findJobById(@PathVariable Integer id) {
+    public ResponseEntity<JobResponse> findJobById(@PathVariable Integer id) {
         Job job = jobService.findJobById(id);
-        return ResponseEntity.ok(job);
+        return ResponseEntity.ok(new JobResponse(job));
     }
-//-------------
+
     @GetMapping("/skill/{skillSlug}")
     public ResponseEntity<List<JobResponse>> findJobBySkillSlug(@PathVariable String skillSlug) {
         List<JobResponse> list = jobService.findJobsBySkillSlug(skillSlug);
@@ -46,12 +46,12 @@ public class JobController {
         return ResponseEntity.ok(list);
     }
 
-    @GetMapping("/slug/{Slug}")
+    @GetMapping("/slug/{slug}")
     public ResponseEntity<JobResponse> findJobBySlug(@PathVariable String slug) {
          Job job = jobService.findJobBySlug(slug);
         return ResponseEntity.ok(new JobResponse(job));
     }
-//------------
+
     @PostMapping
     public ResponseEntity<?> createJob(@RequestBody JobRequest jobRequest) {
         jobService.saveJob(jobRequest);

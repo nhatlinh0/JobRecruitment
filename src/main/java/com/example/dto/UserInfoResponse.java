@@ -1,9 +1,17 @@
 package com.example.dto;
+import com.example.entity.Skill;
 import com.example.entity.UserInfo;
 import com.example.enums.WorkingType;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Getter
+@Setter
+
 public class UserInfoResponse {
     private Integer salaryMax;
     private Integer salaryMin;
@@ -15,6 +23,7 @@ public class UserInfoResponse {
     private String image;
     private String domainName;
     private String username;
+    private Set<String> skills;
 
     public UserInfoResponse (UserInfo userInfo) {
         if(userInfo != null) {
@@ -28,6 +37,7 @@ public class UserInfoResponse {
             this.image = userInfo.getImage();
             this.domainName = userInfo.getDomain().getName();
             this.username = userInfo.getUsername();
+            this.skills = userInfo.getSkills().stream().map(Skill::getName).collect(Collectors.toSet());
         }
     }
 }

@@ -21,9 +21,9 @@ public class UserInfoController {
     private UserInfoService userInfoService;
 
     //BASIC
-    @GetMapping("/{id}")
-    public ResponseEntity<UserInfoResponse> getUserInfo(@PathVariable Integer id) {
-        UserInfo userInfo = userInfoService.findUserInfo(id);
+    @GetMapping()
+    public ResponseEntity<UserInfoResponse> getUserInfo() {
+        UserInfo userInfo = userInfoService.findUserInfo();
         return new ResponseEntity<>(new UserInfoResponse(userInfo), HttpStatus.OK);
     }
 

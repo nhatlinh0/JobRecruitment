@@ -23,6 +23,7 @@ public class IndustryService {
     public void saveIndustry(IndustryRequest industryRequest) {
         Industry industry = new Industry();
         industry.setName(industryRequest.getName());
+        industry.setSlug(industryRequest.getSlug());
         industry.setDescription(industryRequest.getDescription());
         industryRepository.save(industry);
     }
@@ -30,6 +31,7 @@ public class IndustryService {
     public void updateIndustry(IndustryRequest industryRequest, Integer id) {
         Industry industry  = industryRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy industry"));
         industry.setName(industryRequest.getName());
+        industry.setSlug(industryRequest.getSlug());
         industry.setDescription(industryRequest.getDescription());
         industryRepository.save(industry);
     }

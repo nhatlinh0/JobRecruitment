@@ -34,7 +34,7 @@ public class DomainController {
         domainService.saveDomain(domainRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-//--------------
+
     @GetMapping("/{domainId}")
     public ResponseEntity<List<SkillResponse>> getSkillsDomain (@PathVariable Integer domainId) {
         List<SkillResponse> skills = skillService.getSkillsFromDomain(domainId);
@@ -52,7 +52,7 @@ public class DomainController {
         skillService.deleteSkillFromDomain(skillId, domainId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-//-----------
+
     @PutMapping("/{id}")
     public ResponseEntity<?> createDomain(@Valid @RequestBody DomainRequest domainRequest, @PathVariable Integer id) {
         domainService.updateDomain(domainRequest, id);

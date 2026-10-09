@@ -76,9 +76,12 @@ public class CompanyService {
          userRepository.save(user);
     }
 
-    public void updateCompany(CompanyRequest companyRequest, Integer id) {
+    public void updateCompany(CompanyRequest companyRequest) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User không tồn tại\""));
+
+        Company company = user.getCompany();
         Industry industry = industryRepository.findById(companyRequest.getIndustryId()).orElseThrow(() -> new RuntimeException("Không tìm thấy Industry"));
-        Company company = companyRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy Industry"));
 
         company.setName(companyRequest.getName());
         company.setSlug(companyRequest.getSlug());

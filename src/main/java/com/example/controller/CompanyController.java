@@ -39,10 +39,10 @@ public class CompanyController {
         Company company =  companyService.findByCompanyId(id);
         return ResponseEntity.ok(new CompanyResponse(company));
     }
-//--------------
-    @GetMapping("/domain/{domainSlug}")
-    public ResponseEntity<?> findCompaniesByIndustrySlug(@PathVariable String domainSlug) {
-        List<CompanyResponse> list =  companyService.findCompanyByIndustrySlug(domainSlug);
+
+    @GetMapping("/industry/{industrySlug}")
+    public ResponseEntity<?> findCompaniesByIndustrySlug(@PathVariable String industrySlug) {
+        List<CompanyResponse> list =  companyService.findCompanyByIndustrySlug(industrySlug);
         if (!list.isEmpty()) {
             return ResponseEntity.ok(list);
         } else {
@@ -65,16 +65,16 @@ public class CompanyController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-//--------------
+
     @PostMapping
     public ResponseEntity<?> createCompany(@Valid @RequestBody CompanyRequest companyRequest) {
         companyService.saveCompany(companyRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateCompany(@Valid @RequestBody CompanyRequest companyRequest, @PathVariable Integer id) {
-        companyService.updateCompany(companyRequest, id);
+    @PutMapping()
+    public ResponseEntity<?> updateCompany(@Valid @RequestBody CompanyRequest companyRequest) {
+        companyService.updateCompany(companyRequest);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

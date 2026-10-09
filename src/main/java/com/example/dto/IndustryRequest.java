@@ -13,6 +13,9 @@ public class IndustryRequest {
     @Size(max = 100, message = "Name tối đa 100 ký tự")
     private String name;
 
+    @Size(max = 100, message = "Slug tối đa 100 ký tự")
+    private String slug;
+
     @NotBlank(message = "Description không được để trống")
     @Size(max = 200, message = "Description tối đa 200 ký tự")
     private String description;
