@@ -3,10 +3,12 @@ package com.example.controller;
 import com.example.dto.JobRequest;
 import com.example.dto.JobResponse;
 import com.example.entity.Job;
+import com.example.security.UserDetailsCustom;
 import com.example.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,8 +55,8 @@ public class JobController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createJob(@RequestBody JobRequest jobRequest) {
-        jobService.saveJob(jobRequest);
+    public ResponseEntity<?> createJob(@RequestBody JobRequest jobRequest, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
+        jobService.saveJob(jobRequest, userDetailsCustom.getUserEntity());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

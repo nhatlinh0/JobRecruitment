@@ -3,15 +3,12 @@ package com.example.service;
 import com.example.dto.JobRequest;
 import com.example.dto.JobResponse;
 import com.example.dto.UserInfoRequest;
-import com.example.entity.Company;
-import com.example.entity.Domain;
-import com.example.entity.Job;
-import com.example.entity.Skill;
-import com.example.repository.CompanyRepository;
-import com.example.repository.DomainRepository;
-import com.example.repository.JobRepository;
-import com.example.repository.SkillRepository;
+import com.example.entity.*;
+import com.example.repository.*;
+import com.example.security.UserDetailsCustom;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -33,16 +30,27 @@ public class JobService {
     @Autowired
     private SkillRepository skillRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public List<JobResponse> getAllJobs() {
        return jobRepository.findAll().stream().map(x -> new JobResponse(x)).toList();
     }
 
-    public void saveJob(JobRequest jobRequest) {
+    public void saveJob(JobRequest jobRequest, User user) {
         validateJob(jobRequest);
 
-        Company company = companyRepository.findById(jobRequest.getCompanyId()).orElseThrow(() -> new RuntimeException("Không tìm thấy company"));
-        Domain domain = domainRepository.findById(jobRequest.getDomainId()).orElseThrow(() -> new RuntimeException("Không tìm thấy domain"));
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication == null || !authentication.isAuthenticated() ||
+//                !(authentication.getPrincipal() instanceof UserDetailsCustom userDetailsCustom)) {
+//            throw new RuntimeException("Vui lòng đăng nhập!");
+//        }
+//        User user = userDetailsCustom.getUserEntity();
 
+        Company company = user.getCompany();
+
+//        Company company = companyRepository.findById(jobRequest.getCompanyId()).orElseThrow(() -> new RuntimeException("Không tìm thấy company"));
+        Domain domain = domainRepository.findById(jobRequest.getDomainId()).orElseThrow(() -> new RuntimeException("Không tìm thấy domain"));
 
         Job job = new Job();
         job.setTitle(jobRequest.getTitle());
@@ -129,6 +137,12 @@ public class JobService {
         if (list.isEmpty()) {
             throw new RuntimeException("Job not found with company slug: " + companySlug);
         }
+        return list.stream().map(JobResponse::new).toList();
+    }
+
+    public List<JobResponse> findAllJobsByCompany(User user) {
+        Company company = user.getCompany();
+        List<Job> list = jobRepository.findAllByCompanyId(company.getId());
         return list.stream().map(JobResponse::new).toList();
     }
 

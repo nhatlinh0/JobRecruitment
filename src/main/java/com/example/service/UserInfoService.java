@@ -9,7 +9,9 @@ import com.example.repository.DomainRepository;
 import com.example.repository.SkillRepository;
 import com.example.repository.UserInfoRepository;
 import com.example.repository.UserRepository;
+import com.example.security.UserDetailsCustom;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -30,11 +32,17 @@ public class UserInfoService {
     @Autowired
     private SkillRepository skillRepository;
 
-    public UserInfo saveUserInfo(UserInfoRequest userInfoRequest, String email) {
+    public UserInfo saveUserInfo(UserInfoRequest userInfoRequest, User user) {
         validateUserInfo(userInfoRequest);
 
 //        BASIC
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User không tồn tại\""));
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication == null || !authentication.isAuthenticated() ||
+//                !(authentication.getPrincipal() instanceof UserDetailsCustom userDetailsCustom)) {
+//            throw new RuntimeException("Vui lòng đăng nhập!");
+//        }
+//        User user = userDetailsCustom.getUserEntity();
+
         Domain domain = domainRepository.findById(userInfoRequest.getDomainId()).orElseThrow(()->new RuntimeException("Role không tồn tại"));
         List<Skill> list = skillRepository.findAllById(userInfoRequest.getSkillIds());
 
@@ -55,11 +63,17 @@ public class UserInfoService {
         return userInfoRepository.save(userInfo);
     }
 
-    public UserInfo updateUserInfo(UserInfoRequest userInfoRequest, String email) {
+    public UserInfo updateUserInfo(UserInfoRequest userInfoRequest, User user) {
         validateUserInfo(userInfoRequest);
 
         //        BASIC
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User không tồn tại\""));
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication == null || !authentication.isAuthenticated() ||
+//                !(authentication.getPrincipal() instanceof UserDetailsCustom userDetailsCustom)) {
+//            throw new RuntimeException("Vui lòng đăng nhập!");
+//        }
+//        User user = userDetailsCustom.getUserEntity();
+
         Domain domain = domainRepository.findById(userInfoRequest.getDomainId()).orElseThrow(()->new RuntimeException("Role không tồn tại"));
         List<Skill> list = skillRepository.findAllById(userInfoRequest.getSkillIds());
 
@@ -79,9 +93,13 @@ public class UserInfoService {
         return userInfoRepository.save(userInfo);
     }
 
-    public UserInfo findUserInfo() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user =userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Không tìm thấy User"));
+    public UserInfo findUserInfo(User user) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication == null || !authentication.isAuthenticated() ||
+//                !(authentication.getPrincipal() instanceof UserDetailsCustom userDetailsCustom)) {
+//            throw new RuntimeException("Vui lòng đăng nhập!");
+//        }
+//        User user = userDetailsCustom.getUserEntity();
 
         return  user.getUserInfo();
     }

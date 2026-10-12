@@ -9,7 +9,9 @@ import com.example.entity.User;
 import com.example.repository.CompanyRepository;
 import com.example.repository.IndustryRepository;
 import com.example.repository.UserRepository;
+import com.example.security.UserDetailsCustom;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,13 +51,14 @@ public class CompanyService {
 
 
     @Transactional
-    public void saveCompany(CompanyRequest companyRequest) {
+    public void saveCompany(CompanyRequest companyRequest, User user) {
         //        BASIC
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user =userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Không tìm thấy User"));
-        if (user.getCompany() != null) {
-            throw new RuntimeException("User đã tồn tại Company");
-        }
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication == null || !authentication.isAuthenticated() ||
+//                !(authentication.getPrincipal() instanceof UserDetailsCustom userDetailsCustom)) {
+//            throw new RuntimeException("Vui lòng đăng nhập!");
+//        }
+//        User user = userDetailsCustom.getUserEntity();
 
         Industry industry = industryRepository.findById(companyRequest.getIndustryId()).orElseThrow(() -> new RuntimeException("Không tìm thấy Industry"));
 
@@ -76,10 +79,7 @@ public class CompanyService {
          userRepository.save(user);
     }
 
-    public void updateCompany(CompanyRequest companyRequest) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User không tồn tại\""));
-
+    public void updateCompany(CompanyRequest companyRequest, User user) {
         Company company = user.getCompany();
         Industry industry = industryRepository.findById(companyRequest.getIndustryId()).orElseThrow(() -> new RuntimeException("Không tìm thấy Industry"));
 

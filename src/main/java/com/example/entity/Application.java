@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import com.example.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -33,8 +34,9 @@ public class Application {
     @Column(name = "cover_letter", columnDefinition = "nvarchar(MAX)")
     private String coverLetter;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 50)
-    private String status;
+    private Status status = Status.PENDING;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
