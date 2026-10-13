@@ -59,6 +59,9 @@ public class CompanyService {
 //            throw new RuntimeException("Vui lòng đăng nhập!");
 //        }
 //        User user = userDetailsCustom.getUserEntity();
+        if (companyRepository.existsByUser(user)) {
+            throw new IllegalStateException("Company đã tồn tại!");
+        }
 
         Industry industry = industryRepository.findById(companyRequest.getIndustryId()).orElseThrow(() -> new RuntimeException("Không tìm thấy Industry"));
 

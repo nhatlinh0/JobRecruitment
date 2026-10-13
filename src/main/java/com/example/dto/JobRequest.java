@@ -22,10 +22,6 @@ public class JobRequest {
     @Size(max = 255, message = "Slug không quá 255 ký tự")
     private String slug;
 
-    @NotNull(message = "Company id không được để trống")
-    @JsonProperty("company_id")
-    private Integer companyId;
-
     @Size(max = 255, message = "Address không quá 255 ký tự")
     private String address;
 

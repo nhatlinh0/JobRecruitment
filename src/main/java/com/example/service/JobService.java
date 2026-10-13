@@ -78,13 +78,13 @@ public class JobService {
     public void updateJob(JobRequest jobRequest, Integer jobId, User user) {
         validateJob(jobRequest);
 
-        Company company = user.getCompany();
-        if (!company.getId().equals(jobRequest.getCompanyId())) {
-            throw new RuntimeException("Không có quyền truy cập");
-        }
-
         Domain domain = domainRepository.findById(jobRequest.getDomainId()).orElseThrow(() -> new RuntimeException("Không tìm thấy domain"));
         Job job = jobRepository.findById(jobId).orElseThrow(() -> new RuntimeException("Không tìm thấy job"));
+
+        Company company = user.getCompany();
+        if (!company.getId().equals(job.getCompany().getId())) {
+            throw new RuntimeException("Không có quyền truy cập");
+        }
 
         job.setTitle(jobRequest.getTitle());
         job.setSlug(jobRequest.getSlug());

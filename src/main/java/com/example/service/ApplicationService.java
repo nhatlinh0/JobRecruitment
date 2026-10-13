@@ -37,10 +37,10 @@ public class ApplicationService {
 
     public List<ApplicationResponse> getAllApplicationsByJob(Integer jobId, User user) {
         Job job = jobRepository.findById(jobId).orElseThrow(() -> new RuntimeException("Không tìm thấy job"));
-        User owner = job.getCompany().getUser().stream().filter((x) -> x.getRole().getName().equals("RECRUITER")).findFirst().orElseThrow(() -> new RuntimeException("Công ty này chưa có nhà tuyển dụng nào!"));
+        User owner = job.getCompany().getUser().stream().filter((x) -> x.getRole().getName().equals("RECRUIT")).findFirst().orElseThrow(() -> new RuntimeException("Chỉ dành cho nhà tuyển dụng!"));
 
-        if (!owner.equals(user)) {
-            throw new RuntimeException("Không có quyền truy cập");
+        if (!owner.getId().equals(user.getId())) {
+            throw new RuntimeException("Không có quyền truy cập!");
         }
 
         List<ApplicationResponse> applicationResponseList = job.getApplications().stream().map((x) -> new ApplicationResponse(x)).toList();
@@ -48,8 +48,7 @@ public class ApplicationService {
     }
 
     public List<ApplicationResponse> getAllApplicationsByUser(User user) {
-
-        List<ApplicationResponse> applicationResponseList = user.getApplications().stream().map((x) -> new ApplicationResponse(x)).toList();
+        List<ApplicationResponse> applicationResponseList = applicationRepository.findAllByUser(user).stream().map((x) -> new ApplicationResponse(x)).toList();
         return applicationResponseList;
     }
 

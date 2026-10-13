@@ -1,6 +1,7 @@
 package com.example.repository;
 
 import com.example.entity.Company;
+import com.example.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,5 +20,5 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
     Optional<Company> findBySlug(String slug);
 
     List<Company> findByIndustrySlug(String slug);
-
+    boolean existsByUser(User user);
 }

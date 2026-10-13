@@ -34,7 +34,7 @@ public class User {
     @Column(name = "status", length = 30, nullable = false)
     private UserStatus status = UserStatus.ACTIVE;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
@@ -45,7 +45,7 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private UserInfo userInfo;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Set<Application> applications = new HashSet<>();
 
     @ManyToMany
