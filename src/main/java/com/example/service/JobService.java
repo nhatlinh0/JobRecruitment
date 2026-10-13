@@ -48,7 +48,6 @@ public class JobService {
 //        User user = userDetailsCustom.getUserEntity();
 
         Company company = user.getCompany();
-
 //        Company company = companyRepository.findById(jobRequest.getCompanyId()).orElseThrow(() -> new RuntimeException("Không tìm thấy company"));
         Domain domain = domainRepository.findById(jobRequest.getDomainId()).orElseThrow(() -> new RuntimeException("Không tìm thấy domain"));
 
@@ -76,8 +75,13 @@ public class JobService {
         jobRepository.save(job);
     }
 
-    public void updateJob(JobRequest jobRequest, Integer jobId) {
+    public void updateJob(JobRequest jobRequest, Integer jobId, User user) {
         validateJob(jobRequest);
+
+        Company company = user.getCompany();
+        if (!company.getId().equals(jobRequest.getCompanyId())) {
+            throw new RuntimeException("Không có quyền truy cập");
+        }
 
         Domain domain = domainRepository.findById(jobRequest.getDomainId()).orElseThrow(() -> new RuntimeException("Không tìm thấy domain"));
         Job job = jobRepository.findById(jobId).orElseThrow(() -> new RuntimeException("Không tìm thấy job"));
@@ -104,7 +108,13 @@ public class JobService {
         jobRepository.save(job);
     }
 
-    public void deleteJob(Integer id) {
+    public void deleteJob(Integer id, User user) {
+        Company company = user.getCompany();
+        Job job = jobRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy job"));
+
+        if (!company.getId().equals(job.getCompany().getId())) {
+            throw new RuntimeException("Không có quyền truy cập");
+        }
         jobRepository.deleteById(id);
     }
 

@@ -19,10 +19,6 @@ public class ApplicationRequest {
     @NotBlank(message = "Cover letter không được để trống")
     private String coverLetter;
 
-    @NotNull(message = "User id không được để trống")
-    @JsonProperty(value = "user_id")
-    private Integer userId;
-
     @NotNull(message = "Job id không được để trống")
     @JsonProperty(value = "job_id")
     private Integer jobId;

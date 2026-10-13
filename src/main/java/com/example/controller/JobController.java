@@ -61,14 +61,14 @@ public class JobController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateJob(@RequestBody JobRequest jobRequest, @PathVariable Integer id) {
-        jobService.updateJob(jobRequest, id);
+    public ResponseEntity<?> updateJob(@RequestBody JobRequest jobRequest, @PathVariable Integer id, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
+        jobService.updateJob(jobRequest, id, userDetailsCustom.getUserEntity());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteJob(@PathVariable Integer id) {
-        jobService.deleteJob(id);
+    public ResponseEntity<?> deleteJob(@PathVariable Integer id, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
+        jobService.deleteJob(id, userDetailsCustom.getUserEntity());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
