@@ -1,29 +1,48 @@
 package com.example.controller;
 
+import com.example.dto.UserRequest;
 import com.example.entity.User;
 import com.example.security.UserDetailsCustom;
+import com.example.security.UserDetailsServiceCustom;
+import com.example.utils.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/public")
+@RequestMapping("/public")
 public class PublicController {
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private  UserDetailsServiceCustom userDetailsServiceCustom;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+
     @GetMapping("/heath-check")
     public String HeathCheck() {
         return "OK";
     }
 
-    @GetMapping ("/test")
-    public String UserCheck(@AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        if (!(principal instanceof UserDetailsCustom)) {
-//            return "Fail";
-//        }
-//        UserDetailsCustom userDetailsCustom = (UserDetailsCustom) principal;
-        User user = userDetailsCustom.getUserEntity();
-        return user.getStatus() + user.getUsername() +user.getEmail();
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody User user) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        user.getEmail(),
+                        user.getPassword()
+                )
+        );
+        UserDetails userDetails = userDetailsServiceCustom.loadUserByUsername(user.getEmail());
+        String jwtToken = jwtUtil.generateToken(userDetails.getUsername());
+        return ResponseEntity.ok(jwtToken);
     }
+
 }
