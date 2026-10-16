@@ -2,10 +2,14 @@ package com.example.controller;
 
 import com.example.dto.ApplicationRequest;
 import com.example.dto.ApplicationResponse;
+import com.example.dto.PageResponse;
 import com.example.entity.Application;
 import com.example.security.UserDetailsCustom;
 import com.example.service.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,11 +24,8 @@ public class ApplicationController {
     private ApplicationService applicationService;
 
     @GetMapping()
-    public ResponseEntity<List<ApplicationResponse>> getAllApplication () {
-        List<ApplicationResponse> list = applicationService.getAllApplications();
-        if (list.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<PageResponse<ApplicationResponse>> getAllApplication (@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        PageResponse<ApplicationResponse> list = applicationService.getAllApplications(pageable);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
@@ -35,20 +36,16 @@ public class ApplicationController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<List<ApplicationResponse>> getAllApplicationByUser (@AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
-        List<ApplicationResponse> list = applicationService.getAllApplicationsByUser(userDetailsCustom.getUserEntity());
-        if (list.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<PageResponse<ApplicationResponse>> getAllApplicationByUser (@AuthenticationPrincipal UserDetailsCustom userDetailsCustom,
+                                                                              @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        PageResponse<ApplicationResponse> list = applicationService.getAllApplicationsByUser(userDetailsCustom.getUserEntity(), pageable);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @GetMapping("/job/{id}")
-    public ResponseEntity<List<ApplicationResponse>> getAllApplicationByJob (@PathVariable Integer id, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
-        List<ApplicationResponse> list = applicationService.getAllApplicationsByJob(id, userDetailsCustom.getUserEntity());
-        if (list.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<PageResponse<ApplicationResponse>> getAllApplicationByJob (@PathVariable Integer id, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom,
+                                                                             @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        PageResponse<ApplicationResponse> list = applicationService.getAllApplicationsByJob(id, userDetailsCustom.getUserEntity(), pageable);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
