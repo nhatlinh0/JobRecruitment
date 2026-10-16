@@ -1,10 +1,14 @@
 package com.example.controller;
 
+import com.example.dto.PageResponse;
 import com.example.dto.SkillRequest;
 import com.example.dto.SkillResponse;
 import com.example.service.SkillService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +22,10 @@ public class SkillController {
     private SkillService skillService;
 
     @GetMapping
-    public ResponseEntity<List<SkillResponse>> getAllSkill() {
-        List<SkillResponse> list = skillService.getAllSkill();
-        if (!list.isEmpty()) {
-            return ResponseEntity.ok(list);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<PageResponse<SkillResponse>> getAllSkill(
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC)
+            Pageable pageable) {
+        return ResponseEntity.ok(skillService.getAllSkill(pageable));
     }
 
 //    @PostMapping("/domain/{domainId}")

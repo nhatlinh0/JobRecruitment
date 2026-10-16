@@ -2,10 +2,14 @@ package com.example.controller;
 
 import com.example.dto.IndustryRequest;
 import com.example.dto.IndustryResponse;
+import com.example.dto.PageResponse;
 import com.example.entity.Industry;
 import com.example.service.IndustryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,14 +24,8 @@ public class IndustryController {
     private IndustryService industryService;
 
     @GetMapping
-    public ResponseEntity<List<IndustryResponse>> getAllIndustry() {
-        List<IndustryResponse> list = industryService.getAllIndustry();
-        if (!list.isEmpty()) {
-            return ResponseEntity.ok(list);
-        }
-        else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<PageResponse<IndustryResponse>> getAllIndustry(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        return ResponseEntity.ok(industryService.getAllIndustry(pageable));
     }
 
     @PostMapping

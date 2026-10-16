@@ -1,9 +1,6 @@
 package com.example.service;
 
-import com.example.dto.DomainRequest;
-import com.example.dto.DomainResponse;
-import com.example.dto.SkillRequest;
-import com.example.dto.SkillResponse;
+import com.example.dto.*;
 import com.example.entity.Domain;
 import com.example.entity.Skill;
 import com.example.repository.DomainRepository;
@@ -12,6 +9,7 @@ import com.example.repository.SkillRepository;
 import com.example.repository.UserInfoRepository;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,13 +43,8 @@ public class DomainService {
         domainRepository.save(domain);
     }
 
-    public List<DomainResponse> findAll() {
-        return domainRepository.findAll().stream().map((x) -> new DomainResponse(x)).toList();
-    }
-
-    public List<SkillResponse> getSkillsFromDomain(Integer domainId) {
-        Domain domain = domainRepository.findById(domainId).orElseThrow(() -> new RuntimeException("Không tìm thấy domain"));
-        return domain.getSkills().stream().map((x) -> new SkillResponse(x)).toList();
+    public PageResponse<DomainResponse> findAll(Pageable pageable) {
+        return PageResponse.from(domainRepository.findAll(pageable).map(DomainResponse::new));
     }
 
     @Transactional

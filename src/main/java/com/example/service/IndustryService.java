@@ -2,11 +2,13 @@ package com.example.service;
 
 import com.example.dto.IndustryRequest;
 import com.example.dto.IndustryResponse;
+import com.example.dto.PageResponse;
 import com.example.entity.Domain;
 import com.example.entity.Industry;
 import com.example.repository.CompanyRepository;
 import com.example.repository.IndustryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,8 +38,8 @@ public class IndustryService {
         industryRepository.save(industry);
     }
 
-    public List<IndustryResponse> getAllIndustry() {
-        return industryRepository.findAll().stream().map((x) -> new IndustryResponse(x)).toList();
+    public PageResponse<IndustryResponse> getAllIndustry(Pageable pageable) {
+        return PageResponse.from(industryRepository.findAll(pageable).map(IndustryResponse::new));
     }
 
     @Transactional

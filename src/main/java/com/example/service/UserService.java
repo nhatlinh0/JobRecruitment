@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.dto.PageResponse;
 import com.example.dto.UserRequest;
 import com.example.dto.UserResponse;
 import com.example.entity.Role;
@@ -7,6 +8,8 @@ import com.example.entity.User;
 import com.example.repository.RoleRepository;
 import com.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -54,9 +57,8 @@ public class UserService {
         }
     }
 
-    public List<UserResponse> getAllUsers() {
-        List<User> listUser = userRepository.findAll();
-        return listUser.stream().map(x -> new UserResponse(x)).toList();
+    public PageResponse<UserResponse> getAllUsers(Pageable pageable) {
+        return PageResponse.from(userRepository.findAll(pageable).map(UserResponse::new)) ;
     }
 
     public void deleteUserById(Integer id) {

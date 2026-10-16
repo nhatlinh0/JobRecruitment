@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.dto.PageResponse;
 import com.example.dto.UserRequest;
 import com.example.dto.UserResponse;
 import com.example.entity.Role;
@@ -7,7 +8,11 @@ import com.example.entity.User;
 import com.example.service.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +29,10 @@ public class UserController {
     private UserService userService;;
 
     @GetMapping("/get-all")
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-         List<UserResponse> userResponseList = userService.getAllUsers();
-         if (!userResponseList.isEmpty()) {
-             return ResponseEntity.ok(userResponseList);
-         } else {
-             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-         }
+    public ResponseEntity<PageResponse<UserResponse>> getAllUsers(
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable) {
+        return ResponseEntity.ok(userService.getAllUsers(pageable));
     }
 
     @PostMapping("/register")

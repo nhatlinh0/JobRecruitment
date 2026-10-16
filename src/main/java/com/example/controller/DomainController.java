@@ -1,14 +1,14 @@
 package com.example.controller;
 
-import com.example.dto.DomainRequest;
-import com.example.dto.DomainResponse;
-import com.example.dto.SkillRequest;
-import com.example.dto.SkillResponse;
+import com.example.dto.*;
 import com.example.entity.Domain;
 import com.example.service.DomainService;
 import com.example.service.SkillService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +25,8 @@ public class DomainController {
     private SkillService skillService;
 
     @GetMapping
-    public ResponseEntity<List<DomainResponse>> getAllDomain() {
-        return ResponseEntity.ok(domainService.findAll());
+    public ResponseEntity<PageResponse<DomainResponse>> getAllDomain(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        return ResponseEntity.ok(domainService.findAll(pageable));
     }
 
     @PostMapping()
@@ -36,8 +36,8 @@ public class DomainController {
     }
 
     @GetMapping("/{domainId}")
-    public ResponseEntity<List<SkillResponse>> getSkillsDomain (@PathVariable Integer domainId) {
-        List<SkillResponse> skills = skillService.getSkillsFromDomain(domainId);
+    public ResponseEntity<PageResponse<SkillResponse>> getSkillsDomain (@PathVariable Integer domainId, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        PageResponse<SkillResponse> skills = skillService.getSkillsFromDomain(domainId, pageable);
         return ResponseEntity.ok(skills);
     }
 

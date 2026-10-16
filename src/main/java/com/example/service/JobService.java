@@ -2,11 +2,14 @@ package com.example.service;
 
 import com.example.dto.JobRequest;
 import com.example.dto.JobResponse;
+import com.example.dto.PageResponse;
 import com.example.dto.UserInfoRequest;
 import com.example.entity.*;
 import com.example.repository.*;
 import com.example.security.UserDetailsCustom;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -33,8 +36,8 @@ public class JobService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<JobResponse> getAllJobs() {
-       return jobRepository.findAll().stream().map(x -> new JobResponse(x)).toList();
+    public PageResponse<JobResponse> getAllJobs(Pageable pageable) {
+       return PageResponse.from(jobRepository.findAll(pageable).map(JobResponse::new));
     }
 
     public void saveJob(JobRequest jobRequest, User user) {
@@ -126,28 +129,19 @@ public class JobService {
         return jobRepository.findBySlug(slug).orElseThrow(() -> new RuntimeException("Không tìm thấy Job"));
     }
 
-    public List<JobResponse> findJobsBySkillSlug(String slug) {
-        List<Job> list = jobRepository.findBySkillsSlug(slug);
-        if (list.isEmpty()) {
-            throw new RuntimeException("Job not found with skill slug: " + slug);
-        }
-        return list.stream().map(JobResponse::new).toList();
+    public PageResponse<JobResponse> findJobsBySkillSlug(String slug, Pageable pageable) {
+        Page<Job> list = jobRepository.findBySkillsSlug(slug, pageable);
+        return PageResponse.from(list.map(JobResponse::new));
     }
 
-    public List<JobResponse> findJobsByDomainSlug(String slug) {
-        List<Job> list = jobRepository.findByDomainSlug(slug);
-        if (list.isEmpty()) {
-            throw new RuntimeException("Job not found with domain slug: " + slug);
-        }
-        return list.stream().map(JobResponse::new).toList();
+    public PageResponse<JobResponse> findJobsByDomainSlug(String slug, Pageable pageable) {
+        Page<Job> list = jobRepository.findByDomainSlug(slug, pageable);
+        return PageResponse.from(list.map(JobResponse::new));
     }
 
-    public List<JobResponse> findJobsByCompanySlug(String companySlug) {
-        List<Job> list = jobRepository.findByCompanySlug(companySlug);
-        if (list.isEmpty()) {
-            throw new RuntimeException("Job not found with company slug: " + companySlug);
-        }
-        return list.stream().map(JobResponse::new).toList();
+    public PageResponse<JobResponse> findJobsByCompanySlug(String companySlug, Pageable pageable) {
+        Page<Job> list = jobRepository.findByCompanySlug(companySlug, pageable);
+        return PageResponse.from(list.map(JobResponse::new));
     }
 
     public List<JobResponse> findAllJobsByCompany(User user) {

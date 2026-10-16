@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.dto.CompanyRequest;
 import com.example.dto.CompanyResponse;
 import com.example.dto.JobResponse;
+import com.example.dto.PageResponse;
 import com.example.entity.Company;
 import com.example.entity.Industry;
 import com.example.entity.User;
@@ -11,6 +12,8 @@ import com.example.repository.IndustryRepository;
 import com.example.repository.UserRepository;
 import com.example.security.UserDetailsCustom;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -29,8 +32,8 @@ public class CompanyService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<CompanyResponse> getAllCompany() {
-        return companyRepository.findAll().stream().map((x) -> new CompanyResponse(x)).toList();
+    public PageResponse<CompanyResponse> getAllCompany(Pageable pageable) {
+        return PageResponse.from(companyRepository.findAll(pageable).map(CompanyResponse::new)) ;
     }
 
     public Company findByCompanyId(Integer id) {
@@ -41,12 +44,9 @@ public class CompanyService {
         return companyRepository.findBySlug(slug).orElseThrow(() -> new RuntimeException("Không tìm thấy Company"));
     }
 
-    public List<CompanyResponse> findCompanyByIndustrySlug(String slug) {
-        List<Company> list = companyRepository.findByIndustrySlug(slug);
-        if (list.isEmpty()) {
-            throw new RuntimeException("Company not found with slug: " + slug);
-        }
-        return list.stream().map(CompanyResponse::new).toList();
+    public PageResponse<CompanyResponse> findCompanyByIndustrySlug(String slug, Pageable pageable) {
+        Page<Company> list = companyRepository.findByIndustrySlug(slug, pageable);
+        return PageResponse.from(list.map(CompanyResponse::new));
     }
 
 

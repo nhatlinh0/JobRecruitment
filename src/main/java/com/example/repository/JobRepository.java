@@ -1,6 +1,8 @@
 package com.example.repository;
 
 import com.example.entity.Job;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,8 +20,8 @@ public interface JobRepository extends JpaRepository<Job, Integer> {
 
     Optional<Job> findBySlug(String slug);
 
-    List<Job> findByDomainSlug(String domainSlug);
-    List<Job> findBySkillsSlug(String skillSlug);
-    List<Job> findByCompanySlug(String companySlug);
+    Page<Job> findByDomainSlug(String domainSlug, Pageable pageable);
+    Page<Job> findBySkillsSlug(String skillSlug, Pageable pageable);
+    Page<Job> findByCompanySlug(String companySlug, Pageable pageable);
     List<Job> findAllByCompanyId(Integer companyId);
 }

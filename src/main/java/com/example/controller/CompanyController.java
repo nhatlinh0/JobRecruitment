@@ -3,12 +3,16 @@ package com.example.controller;
 import com.example.dto.CompanyRequest;
 import com.example.dto.CompanyResponse;
 import com.example.dto.JobResponse;
+import com.example.dto.PageResponse;
 import com.example.entity.Company;
 import com.example.security.UserDetailsCustom;
 import com.example.service.CompanyService;
 import com.example.service.JobService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,13 +30,10 @@ public class CompanyController {
     private JobService jobService;
 
     @GetMapping()
-    public ResponseEntity<List<CompanyResponse>> getAllCompany() {
-        List<CompanyResponse> list =  companyService.getAllCompany();
-        if (!list.isEmpty()) {
-            return ResponseEntity.ok(list);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<PageResponse<CompanyResponse>> getAllCompany(
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC)
+            Pageable pageable) {
+        return ResponseEntity.ok(companyService.getAllCompany(pageable));
     }
 
 //    //ADMIN
@@ -43,13 +44,10 @@ public class CompanyController {
     }
 
     @GetMapping("/industry/{industrySlug}")
-    public ResponseEntity<?> findCompaniesByIndustrySlug(@PathVariable String industrySlug) {
-        List<CompanyResponse> list =  companyService.findCompanyByIndustrySlug(industrySlug);
-        if (!list.isEmpty()) {
-            return ResponseEntity.ok(list);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<PageResponse<CompanyResponse>> findCompaniesByIndustrySlug(@PathVariable String industrySlug, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC)
+    Pageable pageable) {
+        return ResponseEntity.ok(companyService.findCompanyByIndustrySlug(industrySlug, pageable));
+
     }
 
     @GetMapping("/slug/{slug}")
@@ -59,13 +57,10 @@ public class CompanyController {
     }
 
     @GetMapping("/{slug}/jobs")
-    public ResponseEntity<?> findJobsByCompany(@PathVariable String slug) {
-        List<JobResponse> list =  jobService.findJobsByCompanySlug(slug);
-        if (!list.isEmpty()) {
-            return ResponseEntity.ok(list);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<PageResponse<JobResponse>> findJobsByCompany(@PathVariable String slug,
+                                                                       @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        PageResponse<JobResponse> list =  jobService.findJobsByCompanySlug(slug, pageable);
+        return ResponseEntity.ok(list);
     }
 
 //    @GetMapping("/jobs")
