@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +32,7 @@ public class JobController {
 
     }
 
-//    ADMIN
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/id/{id}")
     public ResponseEntity<JobResponse> findJobById(@PathVariable Integer id) {
         Job job = jobService.findJobById(id);
@@ -58,18 +59,21 @@ public class JobController {
         return ResponseEntity.ok(new JobResponse(job));
     }
 
+    @PreAuthorize("hasRole('RECRUIT')")
     @PostMapping
     public ResponseEntity<?> createJob(@RequestBody JobRequest jobRequest, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
         jobService.saveJob(jobRequest, userDetailsCustom.getUserEntity());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('RECRUIT')")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateJob(@RequestBody JobRequest jobRequest, @PathVariable Integer id, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
         jobService.updateJob(jobRequest, id, userDetailsCustom.getUserEntity());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PreAuthorize("hasRole('RECRUIT')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteJob(@PathVariable Integer id, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
         jobService.deleteJob(id, userDetailsCustom.getUserEntity());

@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -22,13 +23,14 @@ public class UserInfoController {
     @Autowired
     private UserInfoService userInfoService;
 
-    //BASIC
+    @PreAuthorize("hasRole('USER')")
     @GetMapping()
     public ResponseEntity<UserInfoResponse> getUserInfo(@AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
         UserInfo userInfo = userInfoService.findUserInfo(userDetailsCustom.getUserEntity());
         return new ResponseEntity<>(new UserInfoResponse(userInfo), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping()
     public ResponseEntity<UserInfoResponse> createUserInfo(@Valid @RequestBody UserInfoRequest userInfoRequest, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
 //        BASIC
@@ -43,6 +45,7 @@ public class UserInfoController {
         }
     }
 
+    @PreAuthorize("hasRole(USER')")
     @PutMapping
     public ResponseEntity<UserInfoResponse> updateUserInfo(@Valid @RequestBody UserInfoRequest userInfoRequest, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
 //        BASIC

@@ -50,8 +50,12 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .authorizeHttpRequests(
                     auth -> auth
-                            .requestMatchers("/public/**")
-                            .permitAll()
+                            .requestMatchers("/public/**").permitAll()
+                            .requestMatchers("/admin/**").hasRole("ADMIN")
+                            .requestMatchers("/api/v1/skills/**").hasRole("ADMIN")
+                            .requestMatchers("/api/v1/industries/**").hasRole("ADMIN")
+                            .requestMatchers("/api/v1/domains/**").hasRole("ADMIN")
+                            .requestMatchers("/api/v1/roles/**").hasRole("ADMIN")
                             .anyRequest()
 //                                .requestMatchers("/auth/user/**")
 //                                .hasRole("USER")

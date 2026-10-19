@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,12 +30,14 @@ public class ApplicationController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/id")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/{id}")
     public ResponseEntity<ApplicationResponse> getApplicationById (@PathVariable Integer id) {
         ApplicationResponse application = applicationService.getApplicationById(id);
         return new ResponseEntity<>(application, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/user")
     public ResponseEntity<PageResponse<ApplicationResponse>> getAllApplicationByUser (@AuthenticationPrincipal UserDetailsCustom userDetailsCustom,
                                                                               @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
@@ -42,6 +45,7 @@ public class ApplicationController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('RECRUIT')")
     @GetMapping("/job/{id}")
     public ResponseEntity<PageResponse<ApplicationResponse>> getAllApplicationByJob (@PathVariable Integer id, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom,
                                                                              @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
@@ -49,18 +53,21 @@ public class ApplicationController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping()
     public ResponseEntity<?> saveApplication (@RequestBody ApplicationRequest applicationRequest, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
         applicationService.saveApplication(applicationRequest, userDetailsCustom.getUserEntity());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateApplication (@RequestBody ApplicationRequest applicationRequest, @PathVariable Integer id, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
         applicationService.updateApplication(applicationRequest, id, userDetailsCustom.getUserEntity());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteApplication (@PathVariable Integer id) {
         applicationService.deleteApplication(id);

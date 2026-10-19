@@ -5,6 +5,8 @@ import com.example.dto.JobResponse;
 import com.example.dto.PageResponse;
 import com.example.dto.UserInfoRequest;
 import com.example.entity.*;
+import com.example.enums.Status;
+import com.example.enums.UserStatus;
 import com.example.repository.*;
 import com.example.security.UserDetailsCustom;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -148,6 +150,24 @@ public class JobService {
         Company company = user.getCompany();
         List<Job> list = jobRepository.findAllByCompanyId(company.getId());
         return list.stream().map(JobResponse::new).toList();
+    }
+
+    public Job acceptJob(Integer jobId) {
+        Job job = jobRepository.findById(jobId).orElseThrow(()->new RuntimeException("Job không tồn tại"));
+        job.setStatus(Status.ACCEPTED);
+        return jobRepository.save(job);
+    }
+
+    public Job rejectJob(Integer jobId) {
+        Job job = jobRepository.findById(jobId).orElseThrow(()->new RuntimeException("Job không tồn tại"));
+        job.setStatus(Status.REJECT);
+        return jobRepository.save(job);
+    }
+
+    public Job suspendJob(Integer jobId) {
+        Job job = jobRepository.findById(jobId).orElseThrow(()->new RuntimeException("Job không tồn tại"));
+        job.setStatus(Status.SUSPEND);
+        return jobRepository.save(job);
     }
 
     public void validateJob(JobRequest jobRequest) {

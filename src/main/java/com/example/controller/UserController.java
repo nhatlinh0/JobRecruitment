@@ -5,6 +5,8 @@ import com.example.dto.UserRequest;
 import com.example.dto.UserResponse;
 import com.example.entity.Role;
 import com.example.entity.User;
+import com.example.security.UserDetailsCustom;
+import com.example.security.UserDetailsServiceCustom;
 import com.example.service.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +17,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +32,7 @@ public class UserController {
     @Autowired
     private UserService userService;;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/get-all")
     public ResponseEntity<PageResponse<UserResponse>> getAllUsers(
             @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
@@ -45,16 +50,27 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<UserResponse> updateUser (@Valid @RequestBody UserRequest userRequest, @PathVariable int id) {
+    @PutMapping("/update")
+    public ResponseEntity<UserResponse> updateUser (@RequestBody String username, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
         try {
-            User updatedUser = userService.updateUser(userRequest, id);
+            User updatedUser = userService.updateUser(username, userDetailsCustom.getUserEntity());
             return ResponseEntity.ok(new UserResponse(updatedUser));
         } catch (Exception e) {
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         }
     }
 
+    @PutMapping("/password-change")
+    public ResponseEntity<UserResponse> changePassword ( @RequestBody String password, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
+        try {
+            User updatedUser = userService.updateUserPassword(password, userDetailsCustom.getUserEntity());
+            return ResponseEntity.ok(new UserResponse(updatedUser));
+        } catch (Exception e) {
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
         userService.deleteUserById(id);

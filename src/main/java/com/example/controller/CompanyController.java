@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class CompanyController {
         return ResponseEntity.ok(companyService.getAllCompany(pageable));
     }
 
-//    //ADMIN
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/id/{id}")
     public ResponseEntity<CompanyResponse> findCompanyId(@PathVariable Integer id) {
         Company company =  companyService.findByCompanyId(id);
@@ -73,18 +74,21 @@ public class CompanyController {
 //        }
 //    }
 
+    @PreAuthorize("hasRole('RECRUIT')")
     @PostMapping
     public ResponseEntity<?> createCompany(@Valid @RequestBody CompanyRequest companyRequest, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
         companyService.saveCompany(companyRequest, userDetailsCustom.getUserEntity());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('RECRUIT')")
     @PutMapping()
     public ResponseEntity<?> updateCompany(@Valid @RequestBody CompanyRequest companyRequest, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
         companyService.updateCompany(companyRequest, userDetailsCustom.getUserEntity());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCompany(@PathVariable Integer id) {
         companyService.deleteCompany(id);

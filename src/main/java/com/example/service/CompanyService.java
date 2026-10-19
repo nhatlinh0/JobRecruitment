@@ -6,7 +6,9 @@ import com.example.dto.JobResponse;
 import com.example.dto.PageResponse;
 import com.example.entity.Company;
 import com.example.entity.Industry;
+import com.example.entity.Job;
 import com.example.entity.User;
+import com.example.enums.Status;
 import com.example.repository.CompanyRepository;
 import com.example.repository.IndustryRepository;
 import com.example.repository.UserRepository;
@@ -102,5 +104,23 @@ public class CompanyService {
     public void deleteCompany(Integer id) {
         userRepository.clearCompany(id);
         companyRepository.deleteById(id);
+    }
+
+    public Company acceptCompany(Integer companyId) {
+        Company company = companyRepository.findById(companyId).orElseThrow(()->new RuntimeException("Company không tồn tại"));
+        company.setStatus(Status.ACCEPTED);
+        return companyRepository.save(company);
+    }
+
+    public Company rejectCompany(Integer companyId) {
+        Company company = companyRepository.findById(companyId).orElseThrow(()->new RuntimeException("Company không tồn tại"));
+        company.setStatus(Status.REJECT);
+        return companyRepository.save(company);
+    }
+
+    public Company suspendCompany(Integer companyId) {
+        Company company = companyRepository.findById(companyId).orElseThrow(()->new RuntimeException("Company không tồn tại"));
+        company.setStatus(Status.SUSPEND);
+        return companyRepository.save(company);
     }
 }
