@@ -35,6 +35,7 @@ public class JobResponse {
     private String city;
     private Status status;
     private Set<String> skills;
+    private Boolean prioritize;
 
     public JobResponse(Job job) {
         this.id = job.getId();
@@ -57,5 +58,6 @@ public class JobResponse {
         this.city = job.getCity();
         this.status = job.getStatus();
         this.skills = job.getSkills().stream().map(Skill::getName).collect(Collectors.toSet());
+        this.prioritize = job.getPrioritize();
     }
 }

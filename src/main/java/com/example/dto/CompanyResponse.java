@@ -19,6 +19,7 @@ public class CompanyResponse {
     private String country;
     private String industryName;
     private String createAt;
+    private String description;
 
     public CompanyResponse(Company company) {
         this.id = company.getId();
@@ -33,5 +34,6 @@ public class CompanyResponse {
         this.country = company.getCountry();
         this.industryName = company.getIndustry().getName();
         this.createAt = company.getCreatedAt().toString();
+        this.description = company.getDescription();
     }
 }

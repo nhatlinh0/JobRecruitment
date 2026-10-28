@@ -100,4 +100,7 @@ public class Job {
             inverseJoinColumns = @JoinColumn(name = "skill_id")
     )
     Set<Skill> skills = new HashSet<>();
+
+    @Column(name = "prioritize", nullable = false)
+    private Boolean prioritize = false;
 }

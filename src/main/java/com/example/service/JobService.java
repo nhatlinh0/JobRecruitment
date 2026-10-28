@@ -73,6 +73,7 @@ public class JobService {
         job.setSalaryMax(jobRequest.getSalaryMax());
         job.setSalaryNegotiable(jobRequest.getSalaryNegotiable());
         job.setCity(jobRequest.getCity());
+        job.setPrioritize(jobRequest.getPrioritize());
 
         List<Skill> newSkills = skillRepository.findAllById(jobRequest.getSkillIds());
         job.setSkills(new HashSet<>(newSkills));
@@ -106,6 +107,7 @@ public class JobService {
         job.setSalaryMax(jobRequest.getSalaryMax());
         job.setSalaryNegotiable(jobRequest.getSalaryNegotiable());
         job.setCity(jobRequest.getCity());
+        job.setPrioritize(jobRequest.getPrioritize());
 
         List<Skill> newSkills = skillRepository.findAllById(jobRequest.getSkillIds());
         job.setSkills(new HashSet<>(newSkills));

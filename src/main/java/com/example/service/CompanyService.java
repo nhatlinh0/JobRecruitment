@@ -77,6 +77,7 @@ public class CompanyService {
         company.setProfilePdfUrl(companyRequest.getProfilePDFUrl());
         company.setCountry(companyRequest.getCountry());
         company.setIndustry(industry);
+        company.setDescription(companyRequest.getDescription());
         companyRepository.save(company);
 
 
@@ -97,6 +98,7 @@ public class CompanyService {
         company.setProfilePdfUrl(companyRequest.getProfilePDFUrl());
         company.setCountry(companyRequest.getCountry());
         company.setIndustry(industry);
+        company.setDescription(companyRequest.getDescription());
         companyRepository.save(company);
     }
 

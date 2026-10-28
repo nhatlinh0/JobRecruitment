@@ -47,4 +47,6 @@ public class CompanyRequest {
 
     @NotNull(message = "Industry id không được để trống")
     private Integer industryId;
+
+    private String description;
 }

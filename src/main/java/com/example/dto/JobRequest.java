@@ -69,4 +69,7 @@ public class JobRequest {
     @Size(max = 6, message = "Job tối đa 6 skills")
     @JsonProperty("skill_ids")
     private Set<Integer> skillIds;
+
+    @NotNull(message = "Job prioritize không được để trống")
+    private Boolean prioritize;
 }

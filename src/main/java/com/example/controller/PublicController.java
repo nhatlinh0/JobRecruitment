@@ -41,7 +41,7 @@ public class PublicController {
                 )
         );
         UserDetails userDetails = userDetailsServiceCustom.loadUserByUsername(user.getEmail());
-        String jwtToken = jwtUtil.generateToken(userDetails.getUsername());
+        String jwtToken = jwtUtil.generateToken(userDetails.getUsername(), userDetails.getUsername());
         return ResponseEntity.ok(jwtToken);
     }
 

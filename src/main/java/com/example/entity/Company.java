@@ -62,4 +62,8 @@ public class Company {
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.REMOVE)
     private Set<Job> jobs = new HashSet<>();
+
+    @Lob
+    @Column(name = "description", columnDefinition = "nvarchar(MAX)")
+    private String description;
 }
