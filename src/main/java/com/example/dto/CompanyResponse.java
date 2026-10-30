@@ -20,6 +20,7 @@ public class CompanyResponse {
     private String industryName;
     private String createAt;
     private String description;
+    private int jobCount;
 
     public CompanyResponse(Company company) {
         this.id = company.getId();
@@ -35,5 +36,6 @@ public class CompanyResponse {
         this.industryName = company.getIndustry().getName();
         this.createAt = company.getCreatedAt().toString();
         this.description = company.getDescription();
+        this.jobCount = company.getJobs().size();
     }
 }

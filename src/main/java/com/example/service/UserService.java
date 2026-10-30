@@ -55,6 +55,11 @@ public class UserService {
         return PageResponse.from(userRepository.findAll(pageable).map(UserResponse::new)) ;
     }
 
+    public User getUserByEmail(String email) {
+        System.out.println("Email nhận được: ["+ email + "]");
+        return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Không tìm thấy User"));
+    }
+
     public void deleteUserById(Integer id) {
         userRepository.deleteById(id);
     }

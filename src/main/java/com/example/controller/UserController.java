@@ -30,7 +30,7 @@ import java.util.Map;
 @RequestMapping("/api/v1/users")
 public class UserController {
     @Autowired
-    private UserService userService;;
+    private UserService userService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/get-all")
@@ -40,14 +40,10 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers(pageable));
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRequest userRequest) {
-        try {
-            User savedUser = userService.saveUser(userRequest);
-            return ResponseEntity.ok(new UserResponse(savedUser));
-        } catch (Exception e) {
-            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
-        }
+    @PostMapping("/get-user")
+    public ResponseEntity<UserResponse> getUserByEmail(@AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
+        User user = userDetailsCustom.getUserEntity();
+        return ResponseEntity.ok(new UserResponse(user));
     }
 
     @PutMapping("/update")
