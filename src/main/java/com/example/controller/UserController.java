@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.dto.PageResponse;
+import com.example.dto.PasswordChangeRequest;
 import com.example.dto.UserRequest;
 import com.example.dto.UserResponse;
 import com.example.entity.Role;
@@ -57,10 +58,10 @@ public class UserController {
     }
 
     @PutMapping("/password-change")
-    public ResponseEntity<UserResponse> changePassword ( @RequestBody String password, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
+    public ResponseEntity<?> changePassword (@RequestBody PasswordChangeRequest password, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
         try {
-            User updatedUser = userService.updateUserPassword(password, userDetailsCustom.getUserEntity());
-            return ResponseEntity.ok(new UserResponse(updatedUser));
+            userService.updateUserPassword(password, userDetailsCustom.getUserEntity());
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         }

@@ -19,11 +19,11 @@ public class UserInfoResponse {
     private String city;
     private Integer experienceMax;
     private Integer experienceMin;
-    private WorkingType workType;
+    private WorkingType workingType;
     private String image;
-    private String domainName;
+    private DomainDtoCustom domain;
     private String username;
-    private Set<String> skills;
+    private Set<SkillDtoCustom> skills;
 
     public UserInfoResponse (UserInfo userInfo) {
         if(userInfo != null) {
@@ -33,11 +33,47 @@ public class UserInfoResponse {
             this.city = userInfo.getCity();
             this.experienceMax = userInfo.getExperienceMax();
             this.experienceMin = userInfo.getExperienceMin();
-            this.workType = userInfo.getWorkingType();
+            this.workingType = userInfo.getWorkingType();
             this.image = userInfo.getImage();
-            this.domainName = userInfo.getDomain().getName();
             this.username = userInfo.getUsername();
-            this.skills = userInfo.getSkills().stream().map(Skill::getName).collect(Collectors.toSet());
+//            this.skills = userInfo.getSkills().stream().map(Skill::getName).collect(Collectors.toSet());
+
+            if (userInfo.getDomain() != null) {
+                this.domain = new DomainDtoCustom(
+                        userInfo.getDomain().getId(),
+                        userInfo.getDomain().getName()
+                );
+            }
+
+            if (userInfo.getSkills() != null) {
+                this.skills = userInfo.getSkills().stream()
+                        .map(skill -> new SkillDtoCustom(skill.getId(), skill.getName()))
+                        .collect(Collectors.toSet());
+            }
+        }
+    }
+
+    @Getter
+    @Setter
+    public static class DomainDtoCustom {
+        private Integer id;
+        private String name;
+
+        public DomainDtoCustom(Integer id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+    }
+
+    @Getter
+    @Setter
+    public static class SkillDtoCustom {
+        private Integer id;
+        private String name;
+
+        public SkillDtoCustom(Integer id, String name) {
+            this.id = id;
+            this.name = name;
         }
     }
 }

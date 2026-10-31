@@ -6,6 +6,7 @@ import com.example.utils.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -52,8 +53,10 @@ public class SecurityConfig {
                     auth -> auth
                             .requestMatchers("/public/**").permitAll()
                             .requestMatchers("/admin/**").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.GET, "/api/v1/skills/**").permitAll()
                             .requestMatchers("/api/v1/skills/**").hasRole("ADMIN")
                             .requestMatchers("/api/v1/industries/**").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.GET, "/api/v1/domains/**").permitAll()
                             .requestMatchers("/api/v1/domains/**").hasRole("ADMIN")
                             .requestMatchers("/api/v1/roles/**").hasRole("ADMIN")
                             .anyRequest()

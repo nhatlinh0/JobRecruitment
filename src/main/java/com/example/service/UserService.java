@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.dto.PageResponse;
+import com.example.dto.PasswordChangeRequest;
 import com.example.dto.UserRequest;
 import com.example.dto.UserResponse;
 import com.example.entity.Role;
@@ -46,8 +47,18 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateUserPassword(String password, User user) {
-        user.setPassword(passwordEncoder.encode(password));
+    public User updateUserPassword(PasswordChangeRequest password, User user) {
+
+        if (!password.getNewPassword().equals(password.getConfirmPassword())) {
+            throw new RuntimeException("Mật khẩu mới và xác nhận mật khẩu không khớp!");
+        }
+
+        if (!passwordEncoder.matches(password.getCurrentPassword(), user.getPassword())) {
+            throw new RuntimeException("Mật khẩu hiện tại không chính xác!");
+        }
+
+        user.setPassword(passwordEncoder.encode(password.getNewPassword()));
+        userRepository.save(user);
         return userRepository.save(user);
     }
 

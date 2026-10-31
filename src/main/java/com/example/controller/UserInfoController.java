@@ -27,7 +27,10 @@ public class UserInfoController {
     @GetMapping()
     public ResponseEntity<UserInfoResponse> getUserInfo(@AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
         UserInfo userInfo = userInfoService.findUserInfo(userDetailsCustom.getUserEntity());
-        return new ResponseEntity<>(new UserInfoResponse(userInfo), HttpStatus.OK);
+        if (userInfo != null) {
+            return new ResponseEntity<>(new UserInfoResponse(userInfo), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PreAuthorize("hasRole('USER')")

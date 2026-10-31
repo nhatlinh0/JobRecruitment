@@ -51,11 +51,11 @@ public class UserInfo {
     @JoinColumn(name = "user_id", unique = true, nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "domain_id")
     private Domain domain;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_skills",
             joinColumns = @JoinColumn(name = "user_info_id"),
