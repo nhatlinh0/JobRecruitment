@@ -32,7 +32,7 @@ public class UserInfoService {
     @Autowired
     private SkillRepository skillRepository;
 
-    public UserInfo saveUserInfo(UserInfoRequest userInfoRequest, User user) {
+    public UserInfo saveUserInfo(UserInfoRequest userInfoRequest, String imageUrl, User user) {
         validateUserInfo(userInfoRequest);
 
 //        BASIC
@@ -55,7 +55,7 @@ public class UserInfoService {
         userInfo.setWorkingType(userInfoRequest.getWorkingType());
         userInfo.setExperienceMax(userInfoRequest.getExperienceMax());
         userInfo.setExperienceMin(userInfoRequest.getExperienceMin());
-        userInfo.setImage(userInfoRequest.getImage());
+        userInfo.setImage(imageUrl);
         userInfo.setDomain(domain);
         userInfo.setUsername(userInfoRequest.getUsername());
         userInfo.setSkills(new HashSet<>(list));
@@ -63,7 +63,7 @@ public class UserInfoService {
         return userInfoRepository.save(userInfo);
     }
 
-    public UserInfo updateUserInfo(UserInfoRequest userInfoRequest, User user) {
+    public UserInfo updateUserInfo(UserInfoRequest userInfoRequest, String imageUrl, User user) {
         validateUserInfo(userInfoRequest);
 
         //        BASIC
@@ -85,7 +85,7 @@ public class UserInfoService {
         userInfo.setWorkingType(userInfoRequest.getWorkingType());
         userInfo.setExperienceMax(userInfoRequest.getExperienceMax());
         userInfo.setExperienceMin(userInfoRequest.getExperienceMin());
-        userInfo.setImage(userInfoRequest.getImage());
+        userInfo.setImage(imageUrl);
         userInfo.setDomain(domain);
         userInfo.setUsername(userInfoRequest.getUsername());
         userInfo.setSkills(new HashSet<>(list));

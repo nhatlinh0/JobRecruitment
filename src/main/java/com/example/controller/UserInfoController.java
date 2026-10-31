@@ -5,6 +5,7 @@ import com.example.dto.UserInfoResponse;
 import com.example.entity.UserInfo;
 import com.example.repository.UserRepository;
 import com.example.security.UserDetailsCustom;
+import com.example.service.CloudinaryService;
 import com.example.service.UserInfoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class UserInfoController {
     @Autowired
     private UserInfoService userInfoService;
 
+    @Autowired
+    private CloudinaryService cloudinaryService;
+
     @PreAuthorize("hasRole('USER')")
     @GetMapping()
     public ResponseEntity<UserInfoResponse> getUserInfo(@AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
@@ -35,12 +39,14 @@ public class UserInfoController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping()
-    public ResponseEntity<UserInfoResponse> createUserInfo(@Valid @RequestBody UserInfoRequest userInfoRequest, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
-//        BASIC
-        String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-
+    public ResponseEntity<UserInfoResponse> createUserInfo(@Valid @ModelAttribute UserInfoRequest userInfoRequest, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
         try {
-            UserInfo userInfo = userInfoService.saveUserInfo(userInfoRequest, userDetailsCustom.getUserEntity());
+            String imageUrl = null;
+
+            if (userInfoRequest.getImage() != null && !userInfoRequest.getImage().isEmpty()) {
+                imageUrl = cloudinaryService.uploadImage(userInfoRequest.getImage());
+            }
+            UserInfo userInfo = userInfoService.saveUserInfo(userInfoRequest, imageUrl, userDetailsCustom.getUserEntity());
             return new ResponseEntity<>(new UserInfoResponse(userInfo),HttpStatus.CREATED);
 
         } catch (Exception e) {
@@ -50,12 +56,14 @@ public class UserInfoController {
 
     @PreAuthorize("hasRole(USER')")
     @PutMapping
-    public ResponseEntity<UserInfoResponse> updateUserInfo(@Valid @RequestBody UserInfoRequest userInfoRequest, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
-//        BASIC
-        String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-
+    public ResponseEntity<UserInfoResponse> updateUserInfo(@Valid @ModelAttribute UserInfoRequest userInfoRequest, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
         try {
-            UserInfo userInfo = userInfoService.updateUserInfo(userInfoRequest, userDetailsCustom.getUserEntity());
+            String imageUrl = null;
+
+            if (userInfoRequest.getImage() != null && !userInfoRequest.getImage().isEmpty()) {
+                imageUrl = cloudinaryService.uploadImage(userInfoRequest.getImage());
+            }
+            UserInfo userInfo = userInfoService.updateUserInfo(userInfoRequest, imageUrl, userDetailsCustom.getUserEntity());
             return new ResponseEntity<>(new UserInfoResponse(userInfo),HttpStatus.OK);
 
         } catch (Exception e) {

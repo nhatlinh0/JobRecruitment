@@ -14,3 +14,8 @@ spring:
       jpa:
         hibernate:
           ddl-auto: none
+
+cloudinary:
+  cloud-name: nmmnc8br
+  api-key: 847273811381311
+  api-secret: jtiLFZRlxGyiF9HCA_whqqCOdT8

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Set;
 
@@ -28,16 +29,13 @@ public class UserInfoRequest {
 
     private WorkingType workingType;
 
-    @Size(max = 100, message = "Image URL tối đa 100 ký tự")
-    private String image;
+    private MultipartFile image;
 
     private Integer domainId ;
 
     @Size(max = 50, message = "Username tối đa 50 ký tự")
     private String username;
 
-    @NotEmpty
     @Size(max = 10, message = "Tối đa 10 skills")
-    @JsonProperty("skill_ids")
     private Set<Integer> skillIds;
 }
