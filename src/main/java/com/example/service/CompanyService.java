@@ -1,9 +1,6 @@
 package com.example.service;
 
-import com.example.dto.CompanyRequest;
-import com.example.dto.CompanyResponse;
-import com.example.dto.JobResponse;
-import com.example.dto.PageResponse;
+import com.example.dto.*;
 import com.example.entity.Company;
 import com.example.entity.Industry;
 import com.example.entity.Job;
@@ -53,7 +50,7 @@ public class CompanyService {
 
 
     @Transactional
-    public void saveCompany(CompanyRequest companyRequest, User user) {
+    public void saveCompany(CompanyRequest companyRequest, String logoUrl, String profileUrl, User user) {
         //        BASIC
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        if (authentication == null || !authentication.isAuthenticated() ||
@@ -73,11 +70,20 @@ public class CompanyService {
         company.setAddress(companyRequest.getAddress());
         company.setCompanySize(companyRequest.getCompanySize());
         company.setPhone(companyRequest.getPhone());
-        company.setLogoUrl(companyRequest.getLogoUrl());
-        company.setProfilePdfUrl(companyRequest.getProfilePDFUrl());
+//        company.setLogoUrl(logoUrl);
+//        company.setProfilePdfUrl(profileUrl);
         company.setCountry(companyRequest.getCountry());
         company.setIndustry(industry);
         company.setDescription(companyRequest.getDescription());
+
+        if (logoUrl != null) {
+            company.setLogoUrl(logoUrl);
+        }
+
+        if (profileUrl != null) {
+            company.setProfilePdfUrl(profileUrl);
+        }
+
         companyRepository.save(company);
 
 
@@ -85,7 +91,7 @@ public class CompanyService {
          userRepository.save(user);
     }
 
-    public void updateCompany(CompanyRequest companyRequest, User user) {
+    public void updateCompany(CompanyRequest companyRequest, String logoUrl, String profileUrl, User user) {
         Company company = user.getCompany();
         Industry industry = industryRepository.findById(companyRequest.getIndustryId()).orElseThrow(() -> new RuntimeException("Không tìm thấy Industry"));
 
@@ -94,11 +100,18 @@ public class CompanyService {
         company.setAddress(companyRequest.getAddress());
         company.setCompanySize(companyRequest.getCompanySize());
         company.setPhone(companyRequest.getPhone());
-        company.setLogoUrl(companyRequest.getLogoUrl());
-        company.setProfilePdfUrl(companyRequest.getProfilePDFUrl());
         company.setCountry(companyRequest.getCountry());
         company.setIndustry(industry);
         company.setDescription(companyRequest.getDescription());
+
+        if (logoUrl != null) {
+            company.setLogoUrl(logoUrl);
+        }
+
+        if (profileUrl != null) {
+            company.setProfilePdfUrl(profileUrl);
+        }
+
         companyRepository.save(company);
     }
 

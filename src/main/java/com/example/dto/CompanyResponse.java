@@ -17,7 +17,7 @@ public class CompanyResponse {
     private String profilePDFUrl;
     private String status;
     private String country;
-    private String industryName;
+    private IndustryDtoCustom industry;
     private String createAt;
     private String description;
     private int jobCount;
@@ -33,9 +33,28 @@ public class CompanyResponse {
         this.profilePDFUrl = company.getProfilePdfUrl();
         this.status = company.getStatus().toString();
         this.country = company.getCountry();
-        this.industryName = company.getIndustry().getName();
+//        this.industryName = company.getIndustry().getName();
         this.createAt = company.getCreatedAt().toString();
         this.description = company.getDescription();
         this.jobCount = company.getJobs().size();
+
+        if(company.getIndustry() != null) {
+            this.industry = new IndustryDtoCustom(
+                    company.getIndustry().getId(),
+                    company.getIndustry().getName()
+            );
+        }
+    }
+
+    @Getter
+    @Setter
+    public static class IndustryDtoCustom {
+        private Integer id;
+        private String name;
+
+        public IndustryDtoCustom(Integer id, String name) {
+            this.id = id;
+            this.name = name;
+        }
     }
 }

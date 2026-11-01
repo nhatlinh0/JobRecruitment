@@ -1,11 +1,9 @@
 package com.example.controller;
 
-import com.example.dto.CompanyRequest;
-import com.example.dto.CompanyResponse;
-import com.example.dto.JobResponse;
-import com.example.dto.PageResponse;
+import com.example.dto.*;
 import com.example.entity.Company;
 import com.example.security.UserDetailsCustom;
+import com.example.service.CloudinaryService;
 import com.example.service.CompanyService;
 import com.example.service.JobService;
 import jakarta.validation.Valid;
@@ -30,6 +28,9 @@ public class CompanyController {
     @Autowired
     private JobService jobService;
 
+    @Autowired
+    private CloudinaryService cloudinaryService;
+
     @GetMapping()
     public ResponseEntity<PageResponse<CompanyResponse>> getAllCompany(
             @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC)
@@ -42,6 +43,16 @@ public class CompanyController {
     public ResponseEntity<CompanyResponse> findCompanyId(@PathVariable Integer id) {
         Company company =  companyService.findByCompanyId(id);
         return ResponseEntity.ok(new CompanyResponse(company));
+    }
+
+    @PreAuthorize("hasRole('RECRUIT')")
+    @GetMapping("/my-company")
+    public ResponseEntity<CompanyResponse> myCompany(@AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
+        Company company = userDetailsCustom.getUserEntity().getCompany();
+        if (company != null) {
+            return ResponseEntity.ok(new CompanyResponse(company));
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/industry/{industrySlug}")
@@ -76,15 +87,31 @@ public class CompanyController {
 
     @PreAuthorize("hasRole('RECRUIT')")
     @PostMapping
-    public ResponseEntity<?> createCompany(@Valid @RequestBody CompanyRequest companyRequest, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
-        companyService.saveCompany(companyRequest, userDetailsCustom.getUserEntity());
+    public ResponseEntity<?> createCompany(@Valid @ModelAttribute CompanyRequest companyRequest, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
+        String logoUrl = null;
+        String profileUrl = null;
+        if (companyRequest.getLogoUrl() != null && !companyRequest.getLogoUrl().isEmpty()) {
+            logoUrl = cloudinaryService.uploadImage(companyRequest.getLogoUrl());
+        }
+        if (companyRequest.getProfilePDFUrl() != null && !companyRequest.getProfilePDFUrl().isEmpty()) {
+            profileUrl = cloudinaryService.uploadImage(companyRequest.getProfilePDFUrl());
+        }
+        companyService.saveCompany(companyRequest, logoUrl, profileUrl, userDetailsCustom.getUserEntity());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('RECRUIT')")
     @PutMapping()
-    public ResponseEntity<?> updateCompany(@Valid @RequestBody CompanyRequest companyRequest, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
-        companyService.updateCompany(companyRequest, userDetailsCustom.getUserEntity());
+    public ResponseEntity<?> updateCompany(@Valid @ModelAttribute CompanyRequest companyRequest, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
+        String logoUrl = null;
+        String profileUrl = null;
+        if (companyRequest.getLogoUrl() != null && !companyRequest.getLogoUrl().isEmpty()) {
+            logoUrl = cloudinaryService.uploadImage(companyRequest.getLogoUrl());
+        }
+        if (companyRequest.getProfilePDFUrl() != null && !companyRequest.getProfilePDFUrl().isEmpty()) {
+            profileUrl = cloudinaryService.uploadImage(companyRequest.getProfilePDFUrl());
+        }
+        companyService.updateCompany(companyRequest, logoUrl, profileUrl, userDetailsCustom.getUserEntity());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

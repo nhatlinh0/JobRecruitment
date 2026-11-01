@@ -65,9 +65,7 @@ public class JobRequest {
     @Size(max = 50, message = "City không quá 50 ký tự")
     private String city;
 
-    @NotEmpty
     @Size(max = 6, message = "Job tối đa 6 skills")
-    @JsonProperty("skill_ids")
     private Set<Integer> skillIds;
 
     @NotNull(message = "Job prioritize không được để trống")

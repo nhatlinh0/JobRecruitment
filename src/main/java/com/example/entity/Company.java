@@ -53,14 +53,14 @@ public class Company {
     @Column(name = "country", length = 50, nullable = false)
     private String country;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "industry_id")
     private Industry industry;
 
     @OneToMany(mappedBy = "company")
     private Set<User> user = new HashSet<>();
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "company", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private Set<Job> jobs = new HashSet<>();
 
     @Lob

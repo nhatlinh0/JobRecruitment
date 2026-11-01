@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -29,13 +30,9 @@ public class CompanyRequest {
     @Size(max = 20, message = "Phone tối đa 20 ký tự")
     private String phone;
 
-    @NotBlank(message = "Logo url không được để trống")
-    @Size(max = 500, message = "Logo url tối đa 500 ký tự")
-    private String logoUrl;
+    private MultipartFile logoUrl;
 
-    @NotBlank(message = "Profile url không được để trống")
-    @Size(max = 500, message = "Profile url tối đa 500 ký tự")
-    private String profilePDFUrl;
+    private MultipartFile profilePDFUrl;
 
 //    @NotBlank(message = "Status không được để trống")
 //    @Size(max = 30, message = "Status tối đa 30 ký tự")

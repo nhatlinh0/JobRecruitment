@@ -4,10 +4,7 @@ import com.example.dto.*;
 import com.example.entity.User;
 import com.example.security.UserDetailsCustom;
 import com.example.security.UserDetailsServiceCustom;
-import com.example.service.CompanyService;
-import com.example.service.DomainService;
-import com.example.service.SkillService;
-import com.example.service.UserService;
+import com.example.service.*;
 import com.example.utils.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +43,9 @@ public class PublicController {
 
     @Autowired
     private CompanyService companyService;
+
+    @Autowired
+    private IndustryService industryService;
 
     @GetMapping("/heath-check")
     public String HeathCheck() {
@@ -92,5 +92,10 @@ public class PublicController {
             @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC)
             Pageable pageable) {
         return ResponseEntity.ok(companyService.getAllCompany(pageable));
+    }
+
+    @GetMapping("/industry")
+    public ResponseEntity<PageResponse<IndustryResponse>> getAllIndustry(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        return ResponseEntity.ok(industryService.getAllIndustry(pageable));
     }
 }

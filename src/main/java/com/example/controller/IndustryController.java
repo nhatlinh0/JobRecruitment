@@ -23,10 +23,7 @@ public class IndustryController {
     @Autowired
     private IndustryService industryService;
 
-    @GetMapping
-    public ResponseEntity<PageResponse<IndustryResponse>> getAllIndustry(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
-        return ResponseEntity.ok(industryService.getAllIndustry(pageable));
-    }
+
 
     @PostMapping
     public ResponseEntity<?> createIndustry(@Valid @RequestBody IndustryRequest industryRequest){

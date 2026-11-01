@@ -9,10 +9,7 @@ import com.example.repository.DomainRepository;
 import com.example.repository.SkillRepository;
 import com.example.repository.UserInfoRepository;
 import com.example.repository.UserRepository;
-import com.example.security.UserDetailsCustom;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -55,10 +52,14 @@ public class UserInfoService {
         userInfo.setWorkingType(userInfoRequest.getWorkingType());
         userInfo.setExperienceMax(userInfoRequest.getExperienceMax());
         userInfo.setExperienceMin(userInfoRequest.getExperienceMin());
-        userInfo.setImage(imageUrl);
+//        userInfo.setImage(imageUrl);
         userInfo.setDomain(domain);
         userInfo.setUsername(userInfoRequest.getUsername());
         userInfo.setSkills(new HashSet<>(list));
+
+        if (imageUrl != null) {
+            userInfo.setImage(imageUrl);
+        }
 
         return userInfoRepository.save(userInfo);
     }
@@ -85,10 +86,13 @@ public class UserInfoService {
         userInfo.setWorkingType(userInfoRequest.getWorkingType());
         userInfo.setExperienceMax(userInfoRequest.getExperienceMax());
         userInfo.setExperienceMin(userInfoRequest.getExperienceMin());
-        userInfo.setImage(imageUrl);
         userInfo.setDomain(domain);
         userInfo.setUsername(userInfoRequest.getUsername());
         userInfo.setSkills(new HashSet<>(list));
+
+        if (imageUrl != null) {
+            userInfo.setImage(imageUrl);
+        }
 
         return userInfoRepository.save(userInfo);
     }
