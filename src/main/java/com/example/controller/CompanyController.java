@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.dto.*;
 import com.example.entity.Company;
+import com.example.entity.Job;
 import com.example.security.UserDetailsCustom;
 import com.example.service.CloudinaryService;
 import com.example.service.CompanyService;
@@ -18,6 +19,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/companies")
@@ -51,6 +53,16 @@ public class CompanyController {
         Company company = userDetailsCustom.getUserEntity().getCompany();
         if (company != null) {
             return ResponseEntity.ok(new CompanyResponse(company));
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PreAuthorize("hasRole('RECRUIT')")
+    @GetMapping("/my-jobs")
+    public ResponseEntity<List<JobResponse>> myJobs(@AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
+        List<JobResponse> jobs = jobService.findAllJobsByCompany(userDetailsCustom.getUserEntity());
+        if (jobs != null) {
+            return ResponseEntity.ok(jobs);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

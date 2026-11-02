@@ -73,7 +73,7 @@ public class JobController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PreAuthorize("hasRole('RECRUIT')")
+    @PreAuthorize("hasAnyRole('RECRUIT','ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteJob(@PathVariable Integer id, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
         jobService.deleteJob(id, userDetailsCustom.getUserEntity());
