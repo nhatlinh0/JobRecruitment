@@ -1,13 +1,12 @@
 package com.example.controller;
 
-import com.example.dto.PageResponse;
-import com.example.dto.PasswordChangeRequest;
-import com.example.dto.UserRequest;
-import com.example.dto.UserResponse;
+import com.example.dto.*;
 import com.example.entity.Role;
 import com.example.entity.User;
 import com.example.security.UserDetailsCustom;
 import com.example.security.UserDetailsServiceCustom;
+import com.example.service.ApplicationService;
+import com.example.service.JobService;
 import com.example.service.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +31,12 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JobService jobService;
+
+    @Autowired
+    private ApplicationService applicationService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/get-all")
@@ -72,5 +77,28 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
         userService.deleteUserById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/saved/{id}")
+    public ResponseEntity<?> savedJob(@PathVariable Integer id, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
+        jobService.addSavedJob(id, userDetailsCustom.getUserEntity());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/application-jobs")
+    public ResponseEntity<PageResponse<ApplicationResponse>> findApplications(@AuthenticationPrincipal UserDetailsCustom userDetailsCustom, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC)
+                                                                Pageable pageable) {
+        PageResponse<ApplicationResponse> list = applicationService.findUserApplication(userDetailsCustom.getUserEntity(), pageable);
+        return ResponseEntity.ok(list);
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/saved-jobs")
+    public ResponseEntity<PageResponse<JobResponse>> findSavedJobs(@AuthenticationPrincipal UserDetailsCustom userDetailsCustom, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC)
+    Pageable pageable) {
+        PageResponse<JobResponse> list = jobService.findSavedJobs(userDetailsCustom.getUserEntity(), pageable);
+        return ResponseEntity.ok(list);
     }
 }

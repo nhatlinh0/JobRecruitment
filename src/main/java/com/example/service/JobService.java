@@ -172,6 +172,22 @@ public class JobService {
         return jobRepository.save(job);
     }
 
+    public void addSavedJob (Integer jobId, User user) {
+        Job job = jobRepository.findById(jobId).orElseThrow(()->new RuntimeException("Job không tồn tại"));
+        user.getJobs().add(job);
+        userRepository.save(user);
+    }
+
+//    public PageResponse<JobResponse> findJobsApplication(User user, Pageable pageable) {
+//        Page<Job> list = jobRepository.findJobsApplicationByUserId(user.getId(), pageable);
+//        return PageResponse.from(list.map(JobResponse::new));
+//    }
+
+    public PageResponse<JobResponse> findSavedJobs(User user, Pageable pageable) {
+        Page<Job> list = jobRepository.findSavedJobsByUserId(user.getId(), pageable);
+        return PageResponse.from(list.map(JobResponse::new));
+    }
+
     public void validateJob(JobRequest jobRequest) {
         boolean isNegotiable = jobRequest.getSalaryNegotiable();
         if (isNegotiable) {

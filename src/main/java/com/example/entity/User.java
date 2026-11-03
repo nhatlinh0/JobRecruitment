@@ -48,7 +48,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Set<Application> applications = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "saved_jobs",
             joinColumns = @JoinColumn(name = "user_id"),

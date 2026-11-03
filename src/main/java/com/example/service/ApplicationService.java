@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.example.dto.ApplicationRequest;
 import com.example.dto.ApplicationResponse;
+import com.example.dto.JobResponse;
 import com.example.dto.PageResponse;
 import com.example.entity.Application;
 import com.example.entity.Job;
@@ -57,14 +58,18 @@ public class ApplicationService {
         return PageResponse.from(applicationResponseList);
     }
 
-    public void saveApplication(ApplicationRequest applicationRequest, User user) {
+    public void saveApplication(ApplicationRequest applicationRequest, String imageUrl, User user) {
         Job job = jobRepository.findById(applicationRequest.getJobId()).orElseThrow(() -> new RuntimeException("Không tìm thấy job"));
 
         Application application = new Application();
-        application.setCvUrl(applicationRequest.getCvUrl());
+//        application.setCvUrl(applicationRequest.getCvUrl());
         application.setCoverLetter(applicationRequest.getCoverLetter());
         application.setUser(user);
         application.setJob(job);
+
+        if (imageUrl != null) {
+            application.setCvUrl(imageUrl);
+        }
 
         applicationRepository.save(application);
     }
@@ -80,5 +85,10 @@ public class ApplicationService {
 
     public void deleteApplication( Integer id) {
         applicationRepository.deleteById(id);
+    }
+
+    public PageResponse<ApplicationResponse> findUserApplication(User user, Pageable pageable) {
+        Page<Application> list = applicationRepository.findUserApplication(user.getId(), pageable);
+        return PageResponse.from(list.map(ApplicationResponse::new));
     }
 }

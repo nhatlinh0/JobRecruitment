@@ -6,6 +6,8 @@ import com.example.dto.PageResponse;
 import com.example.entity.Application;
 import com.example.security.UserDetailsCustom;
 import com.example.service.ApplicationService;
+import com.example.service.CloudinaryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,6 +25,9 @@ import java.util.List;
 public class ApplicationController {
     @Autowired
     private ApplicationService applicationService;
+
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     @GetMapping()
     public ResponseEntity<PageResponse<ApplicationResponse>> getAllApplication (@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
@@ -55,8 +60,13 @@ public class ApplicationController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping()
-    public ResponseEntity<?> saveApplication (@RequestBody ApplicationRequest applicationRequest, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
-        applicationService.saveApplication(applicationRequest, userDetailsCustom.getUserEntity());
+    public ResponseEntity<?> saveApplication (@Valid @ModelAttribute ApplicationRequest applicationRequest, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
+        String imageUrl = applicationRequest.getCvUrl();
+
+        if (applicationRequest.getCvUrl() == null || applicationRequest.getCvUrl().isEmpty()) {
+            imageUrl = cloudinaryService.uploadImage(applicationRequest.getCvFile());
+        }
+        applicationService.saveApplication(applicationRequest, imageUrl, userDetailsCustom.getUserEntity());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

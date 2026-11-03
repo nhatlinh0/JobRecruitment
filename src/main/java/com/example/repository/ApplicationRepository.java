@@ -19,4 +19,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
             countQuery = "select count(a) from Application a join a.job j where j.id = :jobId "
     )
     Page<Application> findAllByJob(@Param("jobId") Integer jobId, Pageable pageable);
+
+    @Query("SELECT a FROM Application a WHERE a.user.id = :userId")
+    Page<Application> findUserApplication(@Param("userId") Integer userId, Pageable pageable);
 }
