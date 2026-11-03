@@ -1,12 +1,11 @@
 package com.example.service;
 
-import com.example.dto.ApplicationRequest;
-import com.example.dto.ApplicationResponse;
-import com.example.dto.JobResponse;
-import com.example.dto.PageResponse;
+import com.example.dto.*;
 import com.example.entity.Application;
 import com.example.entity.Job;
 import com.example.entity.User;
+import com.example.enums.Status;
+import com.example.enums.UserStatus;
 import com.example.repository.ApplicationRepository;
 import com.example.repository.JobRepository;
 import com.example.security.UserDetailsCustom;
@@ -59,6 +58,9 @@ public class ApplicationService {
     }
 
     public void saveApplication(ApplicationRequest applicationRequest, String imageUrl, User user) {
+        if (user.getStatus() == UserStatus.INACTIVE) {
+            throw new IllegalArgumentException("Không được ứng tuyển lại");
+        }
         Job job = jobRepository.findById(applicationRequest.getJobId()).orElseThrow(() -> new RuntimeException("Không tìm thấy job"));
 
         Application application = new Application();
@@ -90,5 +92,25 @@ public class ApplicationService {
     public PageResponse<ApplicationResponse> findUserApplication(User user, Pageable pageable) {
         Page<Application> list = applicationRepository.findUserApplication(user.getId(), pageable);
         return PageResponse.from(list.map(ApplicationResponse::new));
+    }
+
+    public boolean exitsApplication(Integer userId, Integer jobId) {
+        if (applicationRepository.existApplication(userId, jobId) == null) {
+            return false;
+        }
+        return true;
+    }
+
+    public void updateApplicationStatus(UpdateStatusRequest status, Integer id, User user) {
+        Application application = applicationRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy Application"));
+        Job job = application.getJob();
+        User owner = job.getCompany().getUser().stream().filter((x) -> x.getRole().getName().equals("RECRUIT")).findFirst().orElseThrow(() -> new RuntimeException("Chỉ dành cho nhà tuyển dụng!"));
+
+        if (!owner.getId().equals(user.getId())) {
+            throw new RuntimeException("Không có quyền truy cập!");
+        }
+        Status statusEnum = Status.valueOf(status.getStatus().toUpperCase());
+        application.setStatus(statusEnum);
+        applicationRepository.save(application);
     }
 }

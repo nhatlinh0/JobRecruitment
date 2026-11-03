@@ -45,14 +45,10 @@ public class JobService {
     public void saveJob(JobRequest jobRequest, User user) {
         validateJob(jobRequest);
 
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication == null || !authentication.isAuthenticated() ||
-//                !(authentication.getPrincipal() instanceof UserDetailsCustom userDetailsCustom)) {
-//            throw new RuntimeException("Vui lòng đăng nhập!");
-//        }
-//        User user = userDetailsCustom.getUserEntity();
-
         Company company = user.getCompany();
+        if (company.getStatus() != Status.ACCEPTED) {
+            throw new IllegalArgumentException("Công ty chưa được duyệt");
+        }
 //        Company company = companyRepository.findById(jobRequest.getCompanyId()).orElseThrow(() -> new RuntimeException("Không tìm thấy company"));
         Domain domain = domainRepository.findById(jobRequest.getDomainId()).orElseThrow(() -> new RuntimeException("Không tìm thấy domain"));
 
@@ -91,7 +87,9 @@ public class JobService {
         if (!company.getId().equals(job.getCompany().getId())) {
             throw new RuntimeException("Không có quyền truy cập");
         }
-
+        if (company.getStatus() != Status.ACCEPTED) {
+            throw new IllegalArgumentException("Công ty chưa được duyệt");
+        }
         job.setTitle(jobRequest.getTitle());
         job.setSlug(jobRequest.getSlug());
         job.setAddress(jobRequest.getAddress());

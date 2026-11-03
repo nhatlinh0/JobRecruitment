@@ -3,7 +3,9 @@ package com.example.controller;
 import com.example.dto.ApplicationRequest;
 import com.example.dto.ApplicationResponse;
 import com.example.dto.PageResponse;
+import com.example.dto.UpdateStatusRequest;
 import com.example.entity.Application;
+import com.example.enums.Status;
 import com.example.security.UserDetailsCustom;
 import com.example.service.ApplicationService;
 import com.example.service.CloudinaryService;
@@ -81,6 +83,21 @@ public class ApplicationController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteApplication (@PathVariable Integer id) {
         applicationService.deleteApplication(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/exist/{jobId}")
+    public ResponseEntity<?> existApplication (@PathVariable Integer jobId, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
+        if (applicationService.exitsApplication(userDetailsCustom.getUserEntity().getId(), jobId)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PreAuthorize("hasRole('RECRUIT')")
+    @PutMapping("/status/{id}")
+    public ResponseEntity<?> updateApplicationStatus (@RequestBody UpdateStatusRequest status, @PathVariable Integer id, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
+        applicationService.updateApplicationStatus(status, id, userDetailsCustom.getUserEntity());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

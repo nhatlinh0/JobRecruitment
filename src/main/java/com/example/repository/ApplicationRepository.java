@@ -22,4 +22,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
 
     @Query("SELECT a FROM Application a WHERE a.user.id = :userId")
     Page<Application> findUserApplication(@Param("userId") Integer userId, Pageable pageable);
+
+    @Query("SELECT a FROM Application a WHERE a.user.id = :userId AND a.job.id = :jobId")
+    Application existApplication (@Param("userId") Integer userId, @Param("jobId") Integer jobId);
 }
