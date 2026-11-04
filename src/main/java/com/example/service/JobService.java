@@ -131,6 +131,11 @@ public class JobService {
         return jobRepository.findBySlug(slug).orElseThrow(() -> new RuntimeException("Không tìm thấy Job"));
     }
 
+    public PageResponse<JobResponse> findJobByTitle(String title, Pageable pageable) {
+        Page<Job> list = jobRepository.findByTitleContainingIgnoreCase(title, pageable);
+        return PageResponse.from(list.map(JobResponse::new));
+    }
+
     public PageResponse<JobResponse> findJobsBySkillSlug(String slug, Pageable pageable) {
         Page<Job> list = jobRepository.findBySkillsSlug(slug, pageable);
         return PageResponse.from(list.map(JobResponse::new));

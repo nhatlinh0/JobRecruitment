@@ -29,12 +29,6 @@ public class DomainController {
         return ResponseEntity.ok(domainService.findAll(pageable));
     }
 
-    @PostMapping()
-    public ResponseEntity<?> updateDomain(@Valid @RequestBody DomainRequest domainRequest) {
-        domainService.saveDomain(domainRequest);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
     @GetMapping("/{domainId}")
     public ResponseEntity<PageResponse<SkillResponse>> getSkillsDomain (@PathVariable Integer domainId, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         PageResponse<SkillResponse> skills = skillService.getSkillsFromDomain(domainId, pageable);
@@ -53,19 +47,5 @@ public class DomainController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> createDomain(@Valid @RequestBody DomainRequest domainRequest, @PathVariable Integer id) {
-        domainService.updateDomain(domainRequest, id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteDomain(@PathVariable int id) {
-        try {
-            domainService.deleteDomain(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
 }

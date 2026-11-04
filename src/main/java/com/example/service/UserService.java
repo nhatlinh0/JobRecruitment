@@ -63,6 +63,10 @@ public class UserService {
         return PageResponse.from(userRepository.findAll(pageable).map(UserResponse::new)) ;
     }
 
+    public PageResponse<UserResponse> findByRoleIdNot(Integer id, Pageable pageable) {
+        return PageResponse.from(userRepository.findByRoleIdNot(id, pageable).map(UserResponse::new)) ;
+    }
+
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Không tìm thấy User"));
     }

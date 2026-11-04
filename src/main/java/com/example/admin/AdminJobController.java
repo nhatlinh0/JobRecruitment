@@ -43,4 +43,10 @@ public class AdminJobController {
         PageResponse<JobResponse> jobs = jobService.findJobsStatus(status, pageable);
         return ResponseEntity.ok(jobs);
     }
+
+    @GetMapping("/title/{title}")
+    public ResponseEntity<PageResponse<JobResponse>> findJobByTitle(@PathVariable String title, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        PageResponse<JobResponse> jobs = jobService.findJobByTitle(title, pageable);
+        return ResponseEntity.ok(jobs);
+    }
 }

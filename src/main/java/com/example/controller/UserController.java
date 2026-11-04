@@ -46,6 +46,14 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers(pageable));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/get-all-users")
+    public ResponseEntity<PageResponse<UserResponse>> findByRoleIdNot(Integer id,
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable) {
+        return ResponseEntity.ok(userService.findByRoleIdNot(4, pageable));
+    }
+
     @PostMapping("/get-user")
     public ResponseEntity<UserResponse> getUserByEmail(@AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
         User user = userDetailsCustom.getUserEntity();

@@ -1,6 +1,8 @@
 package com.example.repository;
 
 import com.example.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +19,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Transactional
     @Query("UPDATE User u SET u.company = NULL WHERE u.company.id = :companyId")
     void clearCompany(@Param("companyId") Integer id);
+
+    Page<User> findByRoleIdNot(Integer roleId, Pageable pageable);
 }

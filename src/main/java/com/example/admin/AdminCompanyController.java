@@ -44,4 +44,11 @@ public class AdminCompanyController {
         PageResponse<CompanyResponse> companies = companyService.findCompanyStatus(status, pageable);
         return ResponseEntity.ok(companies);
     }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<PageResponse<CompanyResponse>> findByName(@PathVariable String name, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC)
+    Pageable pageable) {
+        PageResponse<CompanyResponse> companies =  companyService.findByCompanyName(name, pageable);
+        return ResponseEntity.ok(companies);
+    }
 }

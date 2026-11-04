@@ -20,7 +20,7 @@ public interface JobRepository extends JpaRepository<Job, Integer> {
     void clearDomain(@Param("domainId") Integer id);
 
     Optional<Job> findBySlug(String slug);
-
+    Page<Job> findByTitleContainingIgnoreCase(String title, Pageable pageable);
     Page<Job> findByDomainSlug(String domainSlug, Pageable pageable);
     Page<Job> findBySkillsSlug(String skillSlug, Pageable pageable);
     Page<Job> findByCompanySlug(String companySlug, Pageable pageable);

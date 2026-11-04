@@ -43,6 +43,10 @@ public class CompanyService {
         return companyRepository.findBySlug(slug).orElseThrow(() -> new RuntimeException("Không tìm thấy Company"));
     }
 
+    public PageResponse<CompanyResponse> findByCompanyName(String name, Pageable pageable) {
+        return PageResponse.from(companyRepository.findByNameContainingIgnoreCase(name, pageable).map(CompanyResponse::new));
+    }
+
     public PageResponse<CompanyResponse> findCompanyByIndustrySlug(String slug, Pageable pageable) {
         Page<Company> list = companyRepository.findByIndustrySlug(slug, pageable);
         return PageResponse.from(list.map(CompanyResponse::new));

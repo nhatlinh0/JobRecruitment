@@ -22,6 +22,8 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
     void clearIndustry(@Param("industryId") Integer id);
 
     Optional<Company> findBySlug(String slug);
+    Page<Company> findByNameContainingIgnoreCase(String name, Pageable pageable);
+
 
     Page<Company> findByIndustrySlug(String slug, Pageable pageable);
     boolean existsByUser(User user);

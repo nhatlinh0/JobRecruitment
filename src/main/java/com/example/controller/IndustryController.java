@@ -20,26 +20,5 @@ import java.util.List;
 @RequestMapping("/api/v1/industries")
 public class IndustryController {
 
-    @Autowired
-    private IndustryService industryService;
 
-
-
-    @PostMapping
-    public ResponseEntity<?> createIndustry(@Valid @RequestBody IndustryRequest industryRequest){
-        industryService.saveIndustry(industryRequest);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateIndustry(@Valid @RequestBody IndustryRequest industryRequest, @PathVariable Integer id){
-        industryService.updateIndustry(industryRequest ,id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteIndustry(@PathVariable Integer id) {
-        industryService.deleteIndustry(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
 }
