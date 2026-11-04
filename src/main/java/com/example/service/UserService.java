@@ -1,9 +1,6 @@
 package com.example.service;
 
-import com.example.dto.PageResponse;
-import com.example.dto.PasswordChangeRequest;
-import com.example.dto.UserRequest;
-import com.example.dto.UserResponse;
+import com.example.dto.*;
 import com.example.entity.Role;
 import com.example.entity.User;
 import com.example.enums.UserStatus;
@@ -67,7 +64,6 @@ public class UserService {
     }
 
     public User getUserByEmail(String email) {
-        System.out.println("Email nhận được: ["+ email + "]");
         return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Không tìm thấy User"));
     }
 
@@ -76,9 +72,9 @@ public class UserService {
     }
 
 // ADMIN------------------------
-    public User resetPassword(Integer userId) {
-        User user = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User không tồn tại"));
-        user.setPassword(passwordEncoder.encode("123456"));
+    public User resetPassword(EmailRequest email) {
+        User user = userRepository.findByEmail(email.getEmail()).orElseThrow(()->new RuntimeException("User không tồn tại"));
+        user.setPassword(passwordEncoder.encode("999999"));
         return userRepository.save(user);
     }
 

@@ -29,8 +29,9 @@ public class JobController {
                                                             Pageable pageable) {
         PageResponse<JobResponse> list = jobService.getAllJobs(pageable);
         return ResponseEntity.ok(list);
-
     }
+
+
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/id/{id}")
@@ -85,4 +86,6 @@ public class JobController {
 //        jobService.deleteJobSkills(jobId, skillId);
 //        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 //    }
+
+
 }

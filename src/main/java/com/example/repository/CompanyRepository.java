@@ -1,7 +1,9 @@
 package com.example.repository;
 
 import com.example.entity.Company;
+import com.example.entity.Job;
 import com.example.entity.User;
+import com.example.enums.Status;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,4 +25,6 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
 
     Page<Company> findByIndustrySlug(String slug, Pageable pageable);
     boolean existsByUser(User user);
+    Page<Company> findByStatus(Status status, Pageable pageable);
+
 }

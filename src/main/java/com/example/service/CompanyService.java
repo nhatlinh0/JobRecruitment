@@ -138,4 +138,14 @@ public class CompanyService {
         company.setStatus(Status.SUSPEND);
         return companyRepository.save(company);
     }
+
+    public PageResponse<CompanyResponse> findCompanyStatus(String status, Pageable pageable) {
+        if (status != null && !status.trim().isEmpty()) {
+            Status statusEnum = Status.valueOf(status.toUpperCase());
+            Page<Company> list = companyRepository.findByStatus(statusEnum, pageable);
+            return PageResponse.from(list.map(CompanyResponse::new));
+        }
+        Page<Company> companies = companyRepository.findAll(pageable);
+        return PageResponse.from(companies.map(CompanyResponse::new));
+    }
 }

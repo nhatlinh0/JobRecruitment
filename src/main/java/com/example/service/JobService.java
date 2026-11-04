@@ -186,6 +186,16 @@ public class JobService {
         return PageResponse.from(list.map(JobResponse::new));
     }
 
+    public PageResponse<JobResponse> findJobsStatus(String status, Pageable pageable) {
+        if (status != null && !status.trim().isEmpty()) {
+            Status statusEnum = Status.valueOf(status.toUpperCase());
+            Page<Job> list = jobRepository.findByStatus(statusEnum, pageable);
+            return PageResponse.from(list.map(JobResponse::new));
+        }
+            Page<Job> jobs = jobRepository.findAll(pageable);
+            return PageResponse.from(jobs.map(JobResponse::new));
+    }
+
     public void validateJob(JobRequest jobRequest) {
         boolean isNegotiable = jobRequest.getSalaryNegotiable();
         if (isNegotiable) {

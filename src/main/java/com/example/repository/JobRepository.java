@@ -1,6 +1,7 @@
 package com.example.repository;
 
 import com.example.entity.Job;
+import com.example.enums.Status;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,4 +31,6 @@ public interface JobRepository extends JpaRepository<Job, Integer> {
 
     @Query("SELECT j FROM User u JOIN u.jobs j WHERE u.id = :userId")
     Page<Job> findSavedJobsByUserId(@Param("userId") Integer userId, Pageable pageable);
+
+    Page<Job> findByStatus(Status status, Pageable pageable);
 }
