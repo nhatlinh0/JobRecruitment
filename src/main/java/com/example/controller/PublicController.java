@@ -91,11 +91,12 @@ public class PublicController {
     public ResponseEntity<PageResponse<CompanyResponse>> getAllCompany(
             @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC)
             Pageable pageable) {
-        return ResponseEntity.ok(companyService.getAllCompany(pageable));
+        return ResponseEntity.ok(companyService.getAllCompanyAndStatus(pageable));
     }
 
     @GetMapping("/industry")
     public ResponseEntity<PageResponse<IndustryResponse>> getAllIndustry(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.ok(industryService.getAllIndustry(pageable));
     }
+
 }

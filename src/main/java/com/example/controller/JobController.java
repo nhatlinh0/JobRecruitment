@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.dto.JobFilterRequest;
 import com.example.dto.JobRequest;
 import com.example.dto.JobResponse;
 import com.example.dto.PageResponse;
@@ -31,9 +32,13 @@ public class JobController {
         return ResponseEntity.ok(list);
     }
 
-
-
     @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/filter")
+    public ResponseEntity<PageResponse<JobResponse>> filterJobs(JobFilterRequest filter,
+                                                                @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        return ResponseEntity.ok(jobService.filterJobs(filter, pageable));
+    }
+
     @GetMapping("/id/{id}")
     public ResponseEntity<JobResponse> findJobById(@PathVariable Integer id) {
         Job job = jobService.findJobById(id);
@@ -81,11 +86,9 @@ public class JobController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-//    @DeleteMapping("/{jobId}/skill/{skillId}")
-//    public ResponseEntity<?> deleteJobSkills(@PathVariable Integer jobId, @PathVariable Integer skillId) {
-//        jobService.deleteJobSkills(jobId, skillId);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
-
-
+    @GetMapping("/title/{title}")
+    public ResponseEntity<PageResponse<JobResponse>> findJobByTitle(@PathVariable String title, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        PageResponse<JobResponse> jobs = jobService.findJobByTitleAndStatus(title, pageable);
+        return ResponseEntity.ok(jobs);
+    }
 }

@@ -41,6 +41,12 @@ public class DomainController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PutMapping("/{domainId}/skill")
+    public ResponseEntity<?> updateSkillFromDomain(@Valid @RequestBody SkillRequest skillRequest, @PathVariable Integer domainId){
+        skillService.updateSkill(skillRequest, domainId);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
     @DeleteMapping("{domainId}/skill/{skillId}")
     public ResponseEntity<?> deleteSkillFromDomain(@PathVariable Integer skillId, @PathVariable Integer domainId){
         skillService.deleteSkillFromDomain(skillId, domainId);

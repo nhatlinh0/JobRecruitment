@@ -35,6 +35,10 @@ public class CompanyService {
         return PageResponse.from(companyRepository.findAll(pageable).map(CompanyResponse::new)) ;
     }
 
+    public PageResponse<CompanyResponse> getAllCompanyAndStatus(Pageable pageable) {
+        return PageResponse.from(companyRepository.findByStatus(Status.ACCEPTED, pageable).map(CompanyResponse::new)) ;
+    }
+
     public Company findByCompanyId(Integer id) {
         return companyRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy Company"));
     }

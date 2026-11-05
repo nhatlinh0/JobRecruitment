@@ -1,6 +1,8 @@
 package com.example.service;
 
+import com.example.dto.JobFilterRequest;
 import com.example.dto.JobRequest;
+import com.example.repository.JobSpecification;
 import com.example.dto.JobResponse;
 import com.example.dto.PageResponse;
 import com.example.dto.UserInfoRequest;
@@ -40,6 +42,10 @@ public class JobService {
 
     public PageResponse<JobResponse> getAllJobs(Pageable pageable) {
        return PageResponse.from(jobRepository.findAll(pageable).map(JobResponse::new));
+    }
+
+    public PageResponse<JobResponse> filterJobs(JobFilterRequest filter, Pageable pageable) {
+        return PageResponse.from(jobRepository.findAll(JobSpecification.filter(filter), pageable).map(JobResponse::new));
     }
 
     public void saveJob(JobRequest jobRequest, User user) {
@@ -136,18 +142,23 @@ public class JobService {
         return PageResponse.from(list.map(JobResponse::new));
     }
 
-    public PageResponse<JobResponse> findJobsBySkillSlug(String slug, Pageable pageable) {
-        Page<Job> list = jobRepository.findBySkillsSlug(slug, pageable);
+    public PageResponse<JobResponse> findJobByTitleAndStatus(String title,  Pageable pageable) {
+        Page<Job> list = jobRepository.findByTitleContainingIgnoreCaseAndStatus(title, Status.ACCEPTED, pageable);
         return PageResponse.from(list.map(JobResponse::new));
     }
 
-    public PageResponse<JobResponse> findJobsByDomainSlug(String slug, Pageable pageable) {
-        Page<Job> list = jobRepository.findByDomainSlug(slug, pageable);
+    public PageResponse<JobResponse> findJobsBySkillSlug(String slug, Pageable pageable) {
+        Page<Job> list = jobRepository.findBySkillsSlugAndStatus(slug, Status.ACCEPTED, pageable);
+        return PageResponse.from(list.map(JobResponse::new));
+    }
+
+    public PageResponse<JobResponse> findJobsByDomainSlug(String slug,  Pageable pageable) {
+        Page<Job> list = jobRepository.findByDomainSlugAndStatus(slug, Status.ACCEPTED, pageable);
         return PageResponse.from(list.map(JobResponse::new));
     }
 
     public PageResponse<JobResponse> findJobsByCompanySlug(String companySlug, Pageable pageable) {
-        Page<Job> list = jobRepository.findByCompanySlug(companySlug, pageable);
+        Page<Job> list = jobRepository.findByCompanySlugAndStatus(companySlug, Status.ACCEPTED, pageable);
         return PageResponse.from(list.map(JobResponse::new));
     }
 
