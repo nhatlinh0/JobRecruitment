@@ -192,6 +192,12 @@ public class JobService {
         userRepository.save(user);
     }
 
+    public void removeSavedJob (Integer jobId, User user) {
+        Job job = jobRepository.findById(jobId).orElseThrow(()->new RuntimeException("Job không tồn tại"));
+        user.getJobs().removeIf(savedJob -> savedJob.getId().equals(jobId));
+        userRepository.save(user);
+    }
+
 //    public PageResponse<JobResponse> findJobsApplication(User user, Pageable pageable) {
 //        Page<Job> list = jobRepository.findJobsApplicationByUserId(user.getId(), pageable);
 //        return PageResponse.from(list.map(JobResponse::new));

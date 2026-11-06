@@ -95,6 +95,13 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('USER')")
+    @DeleteMapping("/saved/{id}/remove")
+    public ResponseEntity<?> removeSavedJob(@PathVariable Integer id, @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
+        jobService.removeSavedJob(id, userDetailsCustom.getUserEntity());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/application-jobs")
     public ResponseEntity<PageResponse<ApplicationResponse>> findApplications(@AuthenticationPrincipal UserDetailsCustom userDetailsCustom, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC)
                                                                 Pageable pageable) {
