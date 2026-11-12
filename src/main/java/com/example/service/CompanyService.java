@@ -99,8 +99,10 @@ public class CompanyService {
          userRepository.save(user);
     }
 
+    @Transactional
     public void updateCompany(CompanyRequest companyRequest, String logoUrl, String profileUrl, User user) {
-        Company company = user.getCompany();
+        Company company = companyRepository.findByIdForUpdate(user.getCompany().getId())
+                .orElseThrow(() -> new IllegalStateException("Company không tồn tại"));
         Industry industry = industryRepository.findById(companyRequest.getIndustryId()).orElseThrow(() -> new RuntimeException("Không tìm thấy Industry"));
 
         company.setName(companyRequest.getName());

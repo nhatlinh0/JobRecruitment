@@ -19,3 +19,11 @@ cloudinary:
   cloud-name: nmmnc8br
   api-key: 847273811381311
   api-secret: jtiLFZRlxGyiF9HCA_whqqCOdT8
+
+# Supply sandbox credentials as environment variables; never commit the hash secret.
+# Register the public /api/v1/vnpay/ipn URL separately in the VNPay merchant portal.
+vnpay:
+  tmn-code: 7R0QL1Q1
+  hash-secret: MUGNN4EABXHJZ96D039JBOFP2PPL13VT
+  pay-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+  return-url: https://localhost:8080/api/v1/vnpay/return

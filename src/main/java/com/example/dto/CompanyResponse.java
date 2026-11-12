@@ -20,6 +20,7 @@ public class CompanyResponse {
     private IndustryDtoCustom industry;
     private String createAt;
     private String description;
+    private Integer credits;
     private int jobCount;
 
     public CompanyResponse(Company company) {
@@ -36,6 +37,7 @@ public class CompanyResponse {
 //        this.industryName = company.getIndustry().getName();
         this.createAt = company.getCreatedAt().toString();
         this.description = company.getDescription();
+        this.credits = company.getCredits();
         this.jobCount = company.getJobs().size();
 
         if(company.getIndustry() != null) {

@@ -66,4 +66,7 @@ public class Company {
     @Lob
     @Column(name = "description", columnDefinition = "nvarchar(MAX)")
     private String description;
+
+    @Column(name = "credits", nullable = false)
+    private Integer credits = 0;
 }

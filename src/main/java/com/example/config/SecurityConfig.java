@@ -52,6 +52,10 @@ public class SecurityConfig {
             .authorizeHttpRequests(
                     auth -> auth
                             .requestMatchers("/public/**").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/api/v1/vnpay/return", "/api/v1/vnpay/ipn").permitAll()
+                            .requestMatchers("/api/v1/vnpay/payments", "/api/v1/vnpay/payments/**").hasRole("RECRUIT")
+                            .requestMatchers(HttpMethod.GET, "/api/v1/packages", "/api/v1/packages/**").hasAnyRole("RECRUIT", "ADMIN")
+                            .requestMatchers("/api/v1/packages", "/api/v1/packages/**").hasRole("ADMIN")
                             .requestMatchers("/admin/**").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.GET, "/api/v1/skills/**").permitAll()
                             .requestMatchers("/api/v1/skills/**").hasRole("ADMIN")
