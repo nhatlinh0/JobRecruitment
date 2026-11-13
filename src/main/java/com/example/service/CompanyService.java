@@ -158,4 +158,10 @@ public class CompanyService {
         Page<Company> companies = companyRepository.findAll(pageable);
         return PageResponse.from(companies.map(CompanyResponse::new));
     }
+
+    public Company minusCreditCompany(Integer companyId) {
+        Company company = companyRepository.findById(companyId).orElseThrow(()->new RuntimeException("Company không tồn tại"));
+        company.setCredits(company.getCredits() - 1);
+        return companyRepository.save(company);
+    }
 }

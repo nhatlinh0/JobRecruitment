@@ -40,6 +40,9 @@ public class JobService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private CompanyService companyService;
+
     public PageResponse<JobResponse> getAllJobs(Pageable pageable) {
        return PageResponse.from(jobRepository.findAll(pageable).map(JobResponse::new));
     }
@@ -48,6 +51,7 @@ public class JobService {
         return PageResponse.from(jobRepository.findAll(JobSpecification.filter(filter), pageable).map(JobResponse::new));
     }
 
+    @Transactional
     public void saveJob(JobRequest jobRequest, User user) {
         validateJob(jobRequest);
 
@@ -57,6 +61,9 @@ public class JobService {
         }
 //        Company company = companyRepository.findById(jobRequest.getCompanyId()).orElseThrow(() -> new RuntimeException("Không tìm thấy company"));
         Domain domain = domainRepository.findById(jobRequest.getDomainId()).orElseThrow(() -> new RuntimeException("Không tìm thấy domain"));
+        if (company.getCredits() > 0 && jobRequest.getPrioritize() == true) {
+            companyService.minusCreditCompany(company.getId());
+        }
 
         Job job = new Job();
         job.setTitle(jobRequest.getTitle());
@@ -83,6 +90,7 @@ public class JobService {
         jobRepository.save(job);
     }
 
+    @Transactional
     public void updateJob(JobRequest jobRequest, Integer jobId, User user) {
         validateJob(jobRequest);
 
@@ -96,6 +104,11 @@ public class JobService {
         if (company.getStatus() != Status.ACCEPTED) {
             throw new IllegalArgumentException("Công ty chưa được duyệt");
         }
+
+        if (company.getCredits() > 0 && jobRequest.getPrioritize() == true) {
+            companyService.minusCreditCompany(company.getId());
+        }
+
         job.setTitle(jobRequest.getTitle());
         job.setSlug(jobRequest.getSlug());
         job.setAddress(jobRequest.getAddress());
